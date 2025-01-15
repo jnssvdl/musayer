@@ -1,54 +1,26 @@
-import { Image, StyleSheet, Platform, Alert } from "react-native";
+import Fab from "@/components/fab";
+import { View, Text, StyleSheet } from "react-native";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { Link } from "expo-router";
 
-import { HelloWave } from "@/components/HelloWave";
-import ParallaxScrollView from "@/components/ParallaxScrollView";
-import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { useState } from "react";
-
-export default function HomeScreen() {
-  const [name, setName] = useState("");
-  const greet = () => {
-    if (!name) {
-      Alert.alert("Hello, World");
-    } else {
-      Alert.alert(`Hello, ${name}`);
-    }
-    setName("");
-  };
+export default function Home() {
   return (
-    <ThemedView>
-      <ThemedText>Hello, World</ThemedText>
-      <Input
-        label="Name"
-        onChangeText={(text) => setName(text)}
-        value={name}
-        multiline
-      />
-      <Button onPress={greet} variant="default">
-        Greet
-      </Button>
-    </ThemedView>
+    <View style={styles.container}>
+      <Text>Home</Text>
+      <Fab onPress={() => console.log("hello")}>
+        <Link href={"/search"}>
+          <Ionicons name="add" size={32} />
+        </Link>
+      </Fab>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: "row",
+  container: {
+    flex: 1,
+    position: "relative",
     alignItems: "center",
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: "absolute",
+    justifyContent: "center",
   },
 });
