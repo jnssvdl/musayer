@@ -4,22 +4,63 @@ import { useTrack } from "@/hooks/use-track";
 import TrackCard from "@/components/track-card";
 import { router, Stack } from "expo-router";
 import Button from "@/components/ui/button";
+import { useAuth } from "@/hooks/use-auth";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Database } from "@/types/database.types";
+import { supabase } from "@/lib/supabase";
 
 export default function Compose() {
   const { track } = useTrack();
-  const [notes, setNotes] = useState("");
+  const [note, setNote] = useState("");
+  const { user } = useAuth();
 
   if (!track) {
     router.back();
     return null;
   }
 
+  const queryClient = useQueryClient();
+
+  const { mutateAsync: insertPost } = useMutation({
+    mutationFn: async ({
+      user_id,
+      track_id,
+      note,
+    }: Database["public"]["Tables"]["posts"]["Insert"]) => {
+      console.log("here");
+      const { data, error } = await supabase
+        .from("posts")
+        .insert({ user_id, track_id, note })
+        .select();
+      if (error) console.log(error);
+      console.log(data);
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+    },
+  });
+
+  const handlePost = async () => {
+    if (!user || !track) return;
+    const data = await insertPost({
+      user_id: user.id,
+      track_id: track.id,
+      note: note,
+    });
+    if (data) {
+      router.push("/(protected)/(tabs)");
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Stack.Screen
         options={{
-          headerRight: () => <Button title="Post" disabled={!notes.trim()} />,
-          title: "Compose note",
+          headerRight: () => (
+            <Button title="Post" disabled={!note.trim()} onPress={handlePost} />
+          ),
+          title: "Compose",
         }}
       />
 
@@ -32,15 +73,15 @@ export default function Compose() {
             placeholder="What's on your mind about this track?"
             placeholderTextColor="#657786"
             style={styles.input}
-            value={notes}
-            onChangeText={setNotes}
+            value={note}
+            onChangeText={setNote}
             numberOfLines={6}
             maxLength={280}
           />
         </View>
 
         <View style={styles.characterCount}>
-          <Text style={styles.characterCountText}>{notes.length}/280</Text>
+          <Text style={styles.characterCountText}>{note.length}/280</Text>
         </View>
       </View>
     </View>

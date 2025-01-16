@@ -1,13 +1,71 @@
 import Fab from "@/components/ui/fab";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, FlatList } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Link } from "expo-router";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/lib/supabase";
+import { Track } from "@/types/track";
+import { useToken } from "@/hooks/use-token";
+import PostCard from "@/components/post-card";
+
+const fetchTracks = async (ids: string[], token: string): Promise<Track[]> => {
+  const url = `https://api.spotify.com/v1/tracks?ids=${ids.join(",")}`;
+
+  const response = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+
+  const data = await response.json();
+  return data.tracks;
+};
 
 export default function Home() {
+  const { data: token } = useToken();
+
+  const { data: posts } = useQuery({
+    queryKey: ["posts"],
+    queryFn: async () => {
+      const { data: posts, error } = await supabase
+        .from("posts")
+        .select("*, profiles (username, full_name, avatar_url )")
+        .order("created_at", { ascending: false })
+        .limit(50);
+
+      if (error) throw error;
+
+      if (!posts || posts.length === 0 || !token) return [];
+
+      const ids = Array.from(new Set(posts.map((post) => post.track_id)));
+
+      const tracks = await fetchTracks(ids, token);
+
+      const map = new Map(tracks.map((track) => [track.id, track]));
+
+      return posts.map((post) => ({
+        ...post,
+        track: map.get(post.track_id),
+      }));
+    },
+  });
+
+  console.log(posts?.map((posts) => posts.profiles));
+
   return (
     <View style={styles.container}>
-      <Text style={styles.placeholderText}>No posts yet</Text>
-      <Text style={styles.subText}>Posts you create will appear here</Text>
+      <View style={styles.container}>
+        <FlatList
+          data={posts}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => <PostCard post={item} />}
+          contentContainerStyle={styles.listContent}
+        />
+      </View>
 
       <Fab style={styles.fab}>
         <Link href={"/(protected)/(track)"}>
@@ -24,10 +82,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     position: "relative",
-    alignItems: "center",
-    justifyContent: "center",
     backgroundColor: "#14171A",
-    padding: 16,
   },
   placeholderText: {
     color: "#F5F8FA",
@@ -60,5 +115,11 @@ const styles = StyleSheet.create({
     height: "100%",
     alignItems: "center",
     justifyContent: "center",
+  },
+  listContent: {
+    padding: 16,
+  },
+  separator: {
+    height: 16,
   },
 });
