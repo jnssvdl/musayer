@@ -10,7 +10,7 @@ export default function Home() {
       <Text style={styles.subText}>Posts you create will appear here</Text>
 
       <Fab style={styles.fab}>
-        <Link href={"/(track)"}>
+        <Link href={"/(protected)/(track)"}>
           <View style={styles.fabContent}>
             <Ionicons name="add" size={32} color="#14171A" />
           </View>

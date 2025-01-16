@@ -96,7 +96,7 @@ export default function Search() {
             <Pressable
               onPress={() => {
                 setTrack(track);
-                router.push("/(track)/compose");
+                router.push("/(protected)/(track)/compose");
               }}
               style={({ pressed }) => [
                 styles.pressable,

@@ -1,11 +1,15 @@
 import { View, Text, StyleSheet } from "react-native";
 import React from "react";
+import Button from "@/components/ui/button";
+import { useAuth } from "@/hooks/use-auth";
 
 export default function Profile() {
+  const { signOut } = useAuth();
   return (
     <View style={styles.container}>
       <Text style={styles.placeholderText}>Profile</Text>
       <Text style={styles.subText}>Your profile details will appear here</Text>
+      <Button title="Logout" onPress={signOut} />
     </View>
   );
 }
