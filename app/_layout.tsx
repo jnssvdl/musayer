@@ -40,6 +40,7 @@ export default function RootLayout() {
         <Stack>
           <Stack.Screen name="(tabs)" />
           <Stack.Screen name="+not-found" />
+          <Stack.Screen name="(track)" options={{ headerShown: false }} />
         </Stack>
         <StatusBar style="auto" />
       </QueryClientProvider>

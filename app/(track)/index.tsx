@@ -13,10 +13,12 @@ import { useToken } from "@/hooks/use-token";
 import { useQuery } from "@tanstack/react-query";
 import { Track } from "@/types/track";
 import TrackCard from "@/components/track-card";
+import { useTrack } from "@/hooks/use-track";
 
 export default function Search() {
   const [query, setQuery] = useState("");
   const { data: token } = useToken();
+  const { setTrack } = useTrack();
 
   const {
     data: tracks,
@@ -76,7 +78,10 @@ export default function Search() {
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item: track }) => (
             <Pressable
-              onPress={() => router.push(`/(track)/create/${track.id}`)}
+              onPress={() => {
+                setTrack(track);
+                router.push("/(track)/compose");
+              }}
             >
               <TrackCard track={track} />
             </Pressable>
