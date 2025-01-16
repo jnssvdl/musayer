@@ -29,9 +29,9 @@ export default function RootLayout() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Stack>
+      <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(tabs)" />
-        <Stack.Screen name="(track)" options={{ headerShown: false }} />
+        <Stack.Screen name="(track)" />
       </Stack>
       <StatusBar style="auto" />
     </QueryClientProvider>
