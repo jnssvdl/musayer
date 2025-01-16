@@ -3,13 +3,16 @@ import React from "react";
 import { useTrack } from "@/hooks/use-track";
 import TrackCard from "@/components/track-card";
 import { Input } from "@/components/ui/input";
-import { Stack } from "expo-router";
+import { Redirect, router, Stack } from "expo-router";
 import { Button } from "@/components/ui/button";
 
 export default function Compose() {
   const { track } = useTrack();
 
-  if (!track) return;
+  if (!track) {
+    router.back();
+    return;
+  }
 
   return (
     <View>
