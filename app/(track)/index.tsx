@@ -75,10 +75,6 @@ export default function Search() {
               autoFocus
             />
           ),
-          headerStyle: {
-            backgroundColor: "#14171A",
-          },
-          headerTintColor: "#F5F8FA",
         }}
       />
 

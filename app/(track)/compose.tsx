@@ -20,13 +20,6 @@ export default function Compose() {
         options={{
           headerRight: () => <Button title="Post" disabled={!notes.trim()} />,
           title: "Compose note",
-          headerStyle: {
-            backgroundColor: "#14171A",
-          },
-          headerTintColor: "#F5F8FA",
-          headerTitleStyle: {
-            color: "#F5F8FA",
-          },
         }}
       />
 
