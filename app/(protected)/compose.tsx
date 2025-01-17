@@ -22,23 +22,17 @@ export default function Compose() {
 
   const queryClient = useQueryClient();
 
-  const {
-    mutateAsync: insertPost,
-    isPending,
-    isSuccess,
-  } = useMutation({
+  const { mutateAsync: insertPost, isPending } = useMutation({
     mutationFn: async ({
       user_id,
       track_id,
       note,
     }: Database["public"]["Tables"]["posts"]["Insert"]) => {
-      console.log("here");
       const { data, error } = await supabase
         .from("posts")
         .insert({ user_id, track_id, note })
         .select();
-      if (error) console.log(error);
-      console.log(data);
+      if (error) throw error;
       return data;
     },
     onSuccess: () => {
@@ -53,6 +47,7 @@ export default function Compose() {
       track_id: track.id,
       note: note,
     });
+    console.log(data);
     if (data) {
       router.replace("/(protected)/(tabs)");
     }

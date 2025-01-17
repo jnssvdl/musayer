@@ -21,16 +21,16 @@ export default function SignUp() {
 
   const handleSignUp = async () => {
     if (!email || !password) {
-      Alert.alert("Invalid credentials");
+      Alert.alert("Email and password required");
       return;
     }
     if (password !== confirmPassword) {
-      Alert.alert("Passwords do not match!");
+      Alert.alert("Passwords do not match");
       return;
     }
-    const response = await signUp({ email, password });
-    if (response.error) {
-      Alert.alert(response.error.message);
+    const error = await signUp({ email, password });
+    if (error) {
+      Alert.alert(error.message);
       return;
     }
   };

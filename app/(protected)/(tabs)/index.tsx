@@ -59,8 +59,6 @@ export default function Home() {
     },
   });
 
-  // console.log(posts);
-
   return (
     <View style={styles.container}>
       <FlatList
@@ -70,7 +68,7 @@ export default function Home() {
         contentContainerStyle={styles.listContent}
       />
       <Fab>
-        <Link href={"/(protected)/(track)"}>
+        <Link href={"/(protected)/search"}>
           <Ionicons name="add" size={32} color="#e4e4e7" />
         </Link>
       </Fab>

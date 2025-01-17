@@ -15,16 +15,16 @@ import { useAuth } from "@/hooks/use-auth";
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { signIn, isLoading } = useAuth();
+  const { signIn } = useAuth();
 
   const handleSignIn = async () => {
     if (!email || !password) {
-      Alert.alert("Invalid credentials");
+      Alert.alert("Email and password required");
       return;
     }
-    const response = await signIn({ email, password });
-    if (response.error) {
-      Alert.alert(response.error.message);
+    const error = await signIn({ email, password });
+    if (error) {
+      Alert.alert(error.message);
       return;
     }
   };

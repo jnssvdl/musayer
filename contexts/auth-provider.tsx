@@ -7,11 +7,6 @@ import {
 import { useRouter } from "expo-router";
 import { createContext, PropsWithChildren, useEffect, useState } from "react";
 
-type AuthResponse = {
-  error: AuthError | null;
-  success: boolean;
-};
-
 export type EmailCredentials = Extract<
   SignUpWithPasswordCredentials,
   { email: string }
@@ -19,10 +14,9 @@ export type EmailCredentials = Extract<
 
 type AuthContextType = {
   user: User | null;
-  isLoading: boolean;
-  signUp: (emailCredentials: EmailCredentials) => Promise<AuthResponse>;
-  signIn: (emailCredentials: EmailCredentials) => Promise<AuthResponse>;
-  signOut: () => Promise<AuthResponse>;
+  signUp: (emailCredentials: EmailCredentials) => Promise<AuthError | null>;
+  signIn: (emailCredentials: EmailCredentials) => Promise<AuthError | null>;
+  signOut: () => Promise<AuthError | null>;
 } | null;
 
 export const AuthContext = createContext<AuthContextType>(null);
@@ -32,7 +26,6 @@ type AuthProviderProps = PropsWithChildren;
 export function AuthProvider({ children }: AuthProviderProps) {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const {
@@ -48,68 +41,34 @@ export function AuthProvider({ children }: AuthProviderProps) {
     if (!router) return;
 
     if (user) {
-      router.replace("/(protected)/(tabs)");
+      router.replace("/(protected)");
     } else {
       router.replace("/(auth)/sign-in");
     }
   }, [user, router]);
 
-  const signUp = async (
-    emailCredentials: EmailCredentials
-  ): Promise<AuthResponse> => {
-    setIsLoading(true);
-    try {
-      const { data, error } = await supabase.auth.signUp(emailCredentials);
-      if (error) return { error, success: false };
-      setUser(data.user);
-      return { error: null, success: true };
-    } catch (e) {
-      const error = e as AuthError;
-      console.error(error);
-      return { error, success: false };
-    } finally {
-      setIsLoading(false);
-    }
+  const signUp = async (emailCredentials: EmailCredentials) => {
+    const { data, error } = await supabase.auth.signUp(emailCredentials);
+    setUser(data.user);
+    return error;
   };
 
-  const signIn = async (
-    emailCredentials: EmailCredentials
-  ): Promise<AuthResponse> => {
-    setIsLoading(true);
-    try {
-      const { data, error } = await supabase.auth.signInWithPassword(
-        emailCredentials
-      );
-      if (error) return { error, success: false };
-      setUser(data.user);
-      return { error: null, success: true };
-    } catch (e) {
-      const error = e as AuthError;
-      console.error(error);
-      return { error, success: false };
-    } finally {
-      setIsLoading(false);
-    }
+  const signIn = async (emailCredentials: EmailCredentials) => {
+    const { data, error } = await supabase.auth.signInWithPassword(
+      emailCredentials
+    );
+    setUser(data.user);
+    return error;
   };
 
-  const signOut = async (): Promise<AuthResponse> => {
-    setIsLoading(true);
-    try {
-      const { error } = await supabase.auth.signOut();
-      if (error) return { error, success: false };
-      setUser(null);
-      return { error: null, success: true };
-    } catch (e) {
-      const error = e as AuthError;
-      console.error(error);
-      return { error, success: false };
-    } finally {
-      setIsLoading(false);
-    }
+  const signOut = async () => {
+    const { error } = await supabase.auth.signOut();
+    setUser(null);
+    return error;
   };
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, signUp, signIn, signOut }}>
+    <AuthContext.Provider value={{ user, signUp, signIn, signOut }}>
       {children}
     </AuthContext.Provider>
   );
