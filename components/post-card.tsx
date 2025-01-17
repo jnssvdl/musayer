@@ -9,10 +9,10 @@ type Post = {
   id: string;
   note: string;
   track_id: string;
-  user_id: string;
+  profile_id: string;
   profiles: {
     username: string | null;
-    full_name: string | null;
+    display_name: string | null;
     avatar_url: string | null;
   };
 };

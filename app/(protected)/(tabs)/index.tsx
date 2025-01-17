@@ -38,7 +38,7 @@ export default function Home() {
     queryFn: async () => {
       const { data: posts, error } = await supabase
         .from("posts")
-        .select("*, profiles (username, full_name, avatar_url )")
+        .select("*, profiles (username, display_name, avatar_url )")
         .order("created_at", { ascending: false })
         .limit(50);
 

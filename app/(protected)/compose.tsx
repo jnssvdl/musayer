@@ -22,15 +22,15 @@ export default function Compose() {
 
   const queryClient = useQueryClient();
 
-  const { mutateAsync: insertPost, isPending } = useMutation({
+  const { mutateAsync, isPending } = useMutation({
     mutationFn: async ({
-      user_id,
+      profile_id,
       track_id,
       note,
     }: Database["public"]["Tables"]["posts"]["Insert"]) => {
       const { data, error } = await supabase
         .from("posts")
-        .insert({ user_id, track_id, note })
+        .insert({ profile_id, track_id, note })
         .select();
       if (error) throw error;
       return data;
@@ -42,8 +42,8 @@ export default function Compose() {
 
   const handlePost = async () => {
     if (!user || !track) return;
-    const data = await insertPost({
-      user_id: user.id,
+    const data = await mutateAsync({
+      profile_id: user.id,
       track_id: track.id,
       note: note,
     });

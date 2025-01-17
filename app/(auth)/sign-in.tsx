@@ -29,14 +29,6 @@ export default function SignIn() {
     }
   };
 
-  const handleGoogleSignIn = () => {
-    console.log("Sign in with Google");
-  };
-
-  const handleSignUp = () => {
-    console.log("Navigate to sign up");
-  };
-
   return (
     <View style={styles.container}>
       <View style={styles.content}>
@@ -78,17 +70,6 @@ export default function SignIn() {
             <Text style={styles.orText}>OR</Text>
             <View style={styles.line} />
           </View>
-
-          <TouchableOpacity
-            style={styles.googleButton}
-            onPress={handleGoogleSignIn}
-          >
-            <Image
-              source={{ uri: "https://cdn.svgporn.com/logos/google-icon.svg" }}
-              style={styles.googleIcon}
-            />
-            <Text style={styles.googleButtonText}>Continue with Google</Text>
-          </TouchableOpacity>
         </View>
 
         <View style={styles.footer}>

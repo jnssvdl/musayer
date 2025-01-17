@@ -12,7 +12,6 @@ export default function Profile() {
   const { data, error, isLoading } = useQuery({
     queryKey: ["profile", user?.id],
     queryFn: async () => {
-      // Skip if no user
       if (!user?.id) return null;
 
       const { data, error } = await supabase
@@ -33,11 +32,12 @@ export default function Profile() {
         <Image source={{ uri: data.avatar_url }} style={styles.avatar} />
       )}
 
-      {data?.full_name && <Text style={styles.name}>{data.full_name}</Text>}
+      {data?.display_name && (
+        <Text style={styles.name}>{data.display_name}</Text>
+      )}
 
       {data?.username && <Text style={styles.username}>@{data.username}</Text>}
 
-      {data?.website && <Text style={styles.website}>{data.website}</Text>}
       <Button title="Sign out" onPress={signOut} />
     </View>
   );

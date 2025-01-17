@@ -1,14 +1,5 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  SafeAreaView,
-  Image,
-  Alert,
-} from "react-native";
+import { View, Text, TextInput, StyleSheet, Alert } from "react-native";
 import Button from "@/components/ui/button"; // Assuming Button is in the same folder
 import { Link } from "expo-router";
 import { useAuth } from "@/hooks/use-auth";
@@ -30,13 +21,10 @@ export default function SignUp() {
     }
     const error = await signUp({ email, password });
     if (error) {
+      console.log(error);
       Alert.alert(error.message);
       return;
     }
-  };
-
-  const handleSignIn = () => {
-    console.log("Navigate to sign in");
   };
 
   return (

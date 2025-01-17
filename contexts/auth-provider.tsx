@@ -4,6 +4,7 @@ import {
   SignUpWithPasswordCredentials,
   User,
 } from "@supabase/supabase-js";
+import { QueryCache } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { createContext, PropsWithChildren, useEffect, useState } from "react";
 
@@ -26,6 +27,7 @@ type AuthProviderProps = PropsWithChildren;
 export function AuthProvider({ children }: AuthProviderProps) {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
+  const queryCache = new QueryCache();
 
   useEffect(() => {
     const {
@@ -64,6 +66,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
     setUser(null);
+    queryCache.clear();
     return error;
   };
 
