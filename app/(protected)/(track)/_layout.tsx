@@ -1,6 +1,7 @@
 import React from "react";
 import { Stack } from "expo-router";
 import { TrackProvider } from "@/contexts/track-context";
+import color from "@/constants/color";
 
 export default function Layout() {
   return (
@@ -8,7 +9,7 @@ export default function Layout() {
       <Stack
         screenOptions={{
           headerStyle: {
-            backgroundColor: "#14171A",
+            backgroundColor: color.primary,
           },
           headerTintColor: "#F5F8FA",
           headerTitleStyle: {

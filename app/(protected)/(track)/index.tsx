@@ -16,6 +16,7 @@ import { Track } from "@/types/track";
 import TrackCard from "@/components/track-card";
 import { useTrack } from "@/hooks/use-track";
 import text from "@/constants/text";
+import color from "@/constants/color";
 
 export default function Search() {
   const [query, setQuery] = useState("");
@@ -69,7 +70,7 @@ export default function Search() {
           headerTitle: () => (
             <TextInput
               placeholder="Search for tracks..."
-              placeholderTextColor="#657786"
+              placeholderTextColor={color.secondary}
               onChangeText={handleChangeText}
               style={styles.searchInput}
               autoFocus
@@ -106,6 +107,7 @@ export default function Search() {
               <TrackCard track={track} />
             </Pressable>
           )}
+          contentContainerStyle={{ gap: 6 }}
           ListEmptyComponent={
             query.length === 0 ? (
               <View style={styles.emptyContainer}>
@@ -123,16 +125,15 @@ export default function Search() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#14171A",
+    backgroundColor: color.primary,
     padding: 8,
   },
   searchInput: {
-    backgroundColor: "#1C2127",
+    backgroundColor: "#18181b",
     borderRadius: 8,
     paddingVertical: 8,
     paddingHorizontal: 16,
-    color: "#F5F8FA",
-    fontSize: 14,
+    ...text.small,
   },
   loading: {
     flex: 1,

@@ -7,8 +7,13 @@ import { supabase } from "@/lib/supabase";
 import { Track } from "@/types/track";
 import { useToken } from "@/hooks/use-token";
 import PostCard from "@/components/post-card";
+import text from "@/constants/text";
+import color from "@/constants/color";
 
-const fetchTracks = async (ids: string[], token: string): Promise<Track[]> => {
+const fetchTracks = async (
+  ids: string[],
+  token: string | undefined
+): Promise<Track[]> => {
   const url = `https://api.spotify.com/v1/tracks?ids=${ids.join(",")}`;
 
   const response = await fetch(url, {
@@ -39,7 +44,7 @@ export default function Home() {
 
       if (error) throw error;
 
-      if (!posts || posts.length === 0 || !token) return [];
+      if (!posts || posts.length === 0) return [];
 
       const ids = Array.from(new Set(posts.map((post) => post.track_id)));
 
@@ -54,24 +59,19 @@ export default function Home() {
     },
   });
 
-  console.log(posts?.map((posts) => posts.profiles));
+  // console.log(posts);
 
   return (
     <View style={styles.container}>
-      <View style={styles.container}>
-        <FlatList
-          data={posts}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <PostCard post={item} />}
-          contentContainerStyle={styles.listContent}
-        />
-      </View>
-
-      <Fab style={styles.fab}>
+      <FlatList
+        data={posts}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => <PostCard post={item} />}
+        contentContainerStyle={styles.listContent}
+      />
+      <Fab>
         <Link href={"/(protected)/(track)"}>
-          <View style={styles.fabContent}>
-            <Ionicons name="add" size={32} color="#14171A" />
-          </View>
+          <Ionicons name="add" size={32} color="#e4e4e7" />
         </Link>
       </Fab>
     </View>
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     position: "relative",
-    backgroundColor: "#14171A",
+    backgroundColor: "#09090b",
   },
   placeholderText: {
     color: "#F5F8FA",
@@ -91,30 +91,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   subText: {
-    color: "#E1E8ED",
-    fontSize: 16,
+    ...text.large,
     marginTop: 8,
     textAlign: "center",
-  },
-  fab: {
-    position: "absolute",
-    bottom: 24,
-    right: 24,
-    backgroundColor: "#E1E8ED",
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    elevation: 4,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-  },
-  fabContent: {
-    width: "100%",
-    height: "100%",
-    alignItems: "center",
-    justifyContent: "center",
   },
   listContent: {
     padding: 16,

@@ -2,12 +2,13 @@ import { View, TextInput, Pressable, Text, StyleSheet } from "react-native";
 import React, { useState } from "react";
 import { useTrack } from "@/hooks/use-track";
 import TrackCard from "@/components/track-card";
-import { router, Stack } from "expo-router";
+import { Redirect, router, Stack } from "expo-router";
 import Button from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Database } from "@/types/database.types";
 import { supabase } from "@/lib/supabase";
+import color from "@/constants/color";
 
 export default function Compose() {
   const { track } = useTrack();
@@ -21,7 +22,11 @@ export default function Compose() {
 
   const queryClient = useQueryClient();
 
-  const { mutateAsync: insertPost } = useMutation({
+  const {
+    mutateAsync: insertPost,
+    isPending,
+    isSuccess,
+  } = useMutation({
     mutationFn: async ({
       user_id,
       track_id,
@@ -49,7 +54,7 @@ export default function Compose() {
       note: note,
     });
     if (data) {
-      router.push("/(protected)/(tabs)");
+      router.replace("/(protected)/(tabs)");
     }
   };
 
@@ -58,7 +63,11 @@ export default function Compose() {
       <Stack.Screen
         options={{
           headerRight: () => (
-            <Button title="Post" disabled={!note.trim()} onPress={handlePost} />
+            <Button
+              title={isPending ? "Posting" : "Post"}
+              disabled={isPending}
+              onPress={handlePost}
+            />
           ),
           title: "Compose",
         }}
@@ -91,7 +100,7 @@ export default function Compose() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#14171A",
+    backgroundColor: color.primary,
     padding: 8,
   },
   content: {
@@ -99,8 +108,6 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     padding: 16,
-    borderTopWidth: 1,
-    borderTopColor: "#2C3338",
   },
   input: {
     color: "#F5F8FA",

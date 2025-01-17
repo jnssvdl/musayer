@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import TrackCard from "./track-card";
 import { Track } from "@/types/track";
+import text from "@/constants/text";
 
 type Post = {
   track: Track | undefined;
@@ -19,12 +20,12 @@ type Post = {
 export default function PostCard({ post }: { post: Post }) {
   return (
     <View>
-      {post.track && <TrackCard track={post.track} />}
-      <Text>{post.note}</Text>
-      <Text>{new Date(post.created_at).toLocaleDateString()}</Text>
-      <Text>{post.profiles.username}</Text>
+      <Text style={text.large}>{post.profiles.username}</Text>
+      <Text style={text.medium}>
+        {new Date(post.created_at).toLocaleDateString()}
+      </Text>
+      <View>{post.track && <TrackCard track={post.track} />}</View>
+      <Text style={text.small}>{post.note}</Text>
     </View>
   );
 }
-
-export const styles = StyleSheet.create({});

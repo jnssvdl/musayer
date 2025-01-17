@@ -1,21 +1,18 @@
-// src/styles.js
-
 import { StyleSheet } from "react-native";
 
-// Define generic text sizes
 const text = StyleSheet.create({
   large: {
-    fontSize: 16, // Larger size for headings or prominent text
+    fontSize: 16,
     fontWeight: "bold",
-    color: "white", // Dark color for high contrast
+    color: "#f4f4f5",
   },
   medium: {
-    fontSize: 14, // Standard size for body text or main content
-    color: "#666", // Slightly lighter color for general text
+    fontSize: 14,
+    color: "#71717a",
   },
   small: {
-    fontSize: 12, // Smaller size for captions or secondary info
-    color: "#999", // Light color for less important text
+    fontSize: 14,
+    color: "#fafafa",
   },
 });
 
