@@ -14,11 +14,13 @@ import { useAuth } from "@/hooks/use-auth";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { router } from "expo-router";
 import { updateProfile } from "@/api/supabase";
+import useUser from "@/hooks/use-user";
 
 export default function OnboardingScreen() {
   const [displayName, setDisplayName] = useState("");
   const [username, setUsername] = useState("");
-  const { user, signOut } = useAuth();
+  const { signOut } = useAuth();
+  const user = useUser();
   const [avatar, setAvatar] = useState<ImagePicker.ImagePickerAsset | null>(
     null
   );
@@ -46,9 +48,7 @@ export default function OnboardingScreen() {
     },
   });
 
-  const handleSubmit = async () => {
-    if (!user) return;
-
+  const handleUpdate = async () => {
     if (!displayName || !username) {
       Alert.alert("Display name or username cannot be blank");
       return;
@@ -111,7 +111,7 @@ export default function OnboardingScreen() {
             autoCapitalize="none"
           />
 
-          <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+          <TouchableOpacity style={styles.button} onPress={handleUpdate}>
             <Text style={styles.buttonText}>Complete Profile</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={signOut}>

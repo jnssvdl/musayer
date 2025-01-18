@@ -4,17 +4,22 @@ import { useTrack } from "@/hooks/use-track";
 import TrackCard from "@/components/track-card";
 import { router, Stack } from "expo-router";
 import Button from "@/components/ui/button";
-import { useAuth } from "@/hooks/use-auth";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import color from "@/constants/color";
 import { createPost } from "@/api/supabase";
+import useUser from "@/hooks/use-user";
 
 export default function Compose() {
   const { track } = useTrack();
 
+  if (!track) {
+    router.back();
+    return null;
+  }
+
   const [note, setNote] = useState("");
 
-  const { user } = useAuth();
+  const user = useUser();
 
   const queryClient = useQueryClient();
 
@@ -26,8 +31,6 @@ export default function Compose() {
   });
 
   const handlePost = async () => {
-    if (!user || !track) return;
-
     const data = await mutateAsync({
       profile_id: user.id,
       track_id: track.id,
@@ -39,21 +42,12 @@ export default function Compose() {
     }
   };
 
-  if (!track) {
-    router.back();
-    return null;
-  }
-
   return (
     <View style={styles.container}>
       <Stack.Screen
         options={{
           headerRight: () => (
-            <Button
-              title={isPending ? "Posting" : "Post"}
-              disabled={isPending}
-              onPress={handlePost}
-            />
+            <Button title={"Post"} disabled={isPending} onPress={handlePost} />
           ),
           title: "Compose",
         }}

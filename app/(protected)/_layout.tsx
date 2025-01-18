@@ -26,8 +26,9 @@ export default function Layout() {
             },
           }}
         >
+          <Stack.Screen name="index" options={{ headerShown: false }} />
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="on-boarding" options={{ headerShown: false }} />
+          <Stack.Screen name="onboarding" options={{ headerShown: false }} />
         </Stack>
       </TrackProvider>
     </UserProvider>
