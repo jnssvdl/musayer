@@ -3,32 +3,12 @@ import { View, Text, StyleSheet, FlatList } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Link } from "expo-router";
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/lib/supabase";
-import { Track } from "@/types/track";
 import { useToken } from "@/hooks/use-token";
 import PostCard from "@/components/post-card";
 import text from "@/constants/text";
 import color from "@/constants/color";
-
-const fetchTracks = async (
-  ids: string[],
-  token: string | undefined
-): Promise<Track[]> => {
-  const url = `https://api.spotify.com/v1/tracks?ids=${ids.join(",")}`;
-
-  const response = await fetch(url, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error("Network response was not ok");
-  }
-
-  const data = await response.json();
-  return data.tracks;
-};
+import { getPosts } from "@/api/supabase/get-posts";
+import { getSeveralTracks } from "@/api/spotify/get-several-tracks";
 
 export default function Home() {
   const { data: token } = useToken();
@@ -36,22 +16,10 @@ export default function Home() {
   const { data: posts } = useQuery({
     queryKey: ["posts"],
     queryFn: async () => {
-      const { data: posts, error } = await supabase
-        .from("posts")
-        .select("*, profiles (username, display_name, avatar_url )")
-        .order("created_at", { ascending: false })
-        .limit(50);
-
-      if (error) throw error;
-
-      if (!posts || posts.length === 0) return [];
-
+      const posts = await getPosts();
       const ids = Array.from(new Set(posts.map((post) => post.track_id)));
-
-      const tracks = await fetchTracks(ids, token);
-
+      const tracks = await getSeveralTracks(ids, token);
       const map = new Map(tracks.map((track) => [track.id, track]));
-
       return posts.map((post) => ({
         ...post,
         track: map.get(post.track_id),
