@@ -53,9 +53,10 @@ export default function Search() {
   });
 
   useEffect(() => {
-    if (query.length > 0) {
+    const debounce = setTimeout(() => {
       refetch();
-    }
+    }, 200);
+    return () => clearTimeout(debounce);
   }, [query]);
 
   return (
