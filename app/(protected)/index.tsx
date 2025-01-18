@@ -3,10 +3,12 @@ import React from "react";
 import { Redirect } from "expo-router";
 import { useAuth } from "@/hooks/use-auth";
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/lib/supabase";
+import { getProfile } from "@/api/supabase";
 
 export default function Index() {
   const { user } = useAuth();
+
+  if (!user) return null;
 
   const {
     data: profile,
@@ -14,25 +16,11 @@ export default function Index() {
     error,
   } = useQuery({
     queryKey: ["profile", user?.id],
-    queryFn: async () => {
-      if (!user?.id) return null;
-
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", user.id)
-        .single();
-
-      if (error) {
-        console.error("Error fetching profile:", error);
-        throw error;
-      }
-
-      return data;
+    queryFn: () => {
+      if (!user) return;
+      return getProfile(user);
     },
   });
-
-  console.log(profile);
 
   // Handle error state
   if (error) {

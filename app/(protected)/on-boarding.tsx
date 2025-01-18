@@ -11,18 +11,17 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "@/hooks/use-auth";
-import { supabase } from "@/lib/supabase";
-import { decode } from "base64-arraybuffer";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { User } from "@supabase/supabase-js";
 import { router } from "expo-router";
+import { updateProfile } from "@/api/supabase";
 
 export default function OnboardingScreen() {
   const [displayName, setDisplayName] = useState("");
   const [username, setUsername] = useState("");
   const { user, signOut } = useAuth();
-  const [uri, setUri] = useState<string | null>(null);
-  const [base64, setBase64] = useState("");
+  const [avatar, setAvatar] = useState<ImagePicker.ImagePickerAsset | null>(
+    null
+  );
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -34,56 +33,14 @@ export default function OnboardingScreen() {
     });
 
     if (!result.canceled && result.assets[0].base64) {
-      setBase64(result.assets[0].base64);
-      setUri(result.assets[0].uri);
+      setAvatar(result.assets[0]);
     }
   };
 
   const queryClient = useQueryClient();
 
   const { mutateAsync } = useMutation({
-    mutationFn: async ({
-      user,
-      base64,
-      displayName,
-      username,
-    }: {
-      user: User;
-      base64: string;
-      displayName: string;
-      username: string;
-    }) => {
-      let avatarUrl = null;
-
-      if (base64) {
-        const extension = uri?.split(".").pop()?.toLowerCase() ?? "jpeg";
-        const path = `${Date.now()}.${extension}`;
-
-        const { error } = await supabase.storage
-          .from("avatars")
-          .upload(path, decode(base64), {
-            contentType: "image/jpeg",
-          });
-
-        if (error) throw error;
-
-        const {
-          data: { publicUrl },
-        } = supabase.storage.from("avatars").getPublicUrl(path);
-
-        avatarUrl = publicUrl;
-      }
-
-      // Update the profile in the database
-      return await supabase
-        .from("profiles")
-        .update({
-          avatar_url: avatarUrl,
-          display_name: displayName,
-          username: username,
-        })
-        .eq("id", user.id);
-    },
+    mutationFn: updateProfile,
     onMutate: () => {
       queryClient.invalidateQueries({ queryKey: ["profile", user?.id] });
     },
@@ -97,9 +54,16 @@ export default function OnboardingScreen() {
       return;
     }
 
+    if (username.length < 3) {
+      Alert.alert("Invalid username");
+      return;
+    }
+
+    if (!avatar) return;
+
     const { error } = await mutateAsync({
       user,
-      base64,
+      avatar,
       displayName,
       username,
     });
@@ -121,8 +85,8 @@ export default function OnboardingScreen() {
         </View>
 
         <TouchableOpacity onPress={pickImage} style={styles.imageContainer}>
-          {uri ? (
-            <Image source={{ uri: uri }} style={styles.profileImage} />
+          {avatar ? (
+            <Image source={{ uri: avatar.uri }} style={styles.profileImage} />
           ) : (
             <View style={styles.imagePlaceholder}>
               <Ionicons name="camera" size={40} color="#6b7280" />

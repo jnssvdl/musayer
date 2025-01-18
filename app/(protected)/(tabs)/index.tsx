@@ -7,8 +7,8 @@ import { useToken } from "@/hooks/use-token";
 import PostCard from "@/components/post-card";
 import text from "@/constants/text";
 import color from "@/constants/color";
-import { getPosts } from "@/api/supabase/get-posts";
-import { getSeveralTracks } from "@/api/spotify/get-several-tracks";
+import { getPosts } from "@/api/supabase";
+import { getSeveralTracks } from "@/api/spotify";
 
 export default function Home() {
   const { data: token } = useToken();

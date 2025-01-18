@@ -4,7 +4,6 @@ import {
   TextInput,
   FlatList,
   Pressable,
-  Image,
   StyleSheet,
   ActivityIndicator,
 } from "react-native";
@@ -53,10 +52,6 @@ export default function Search() {
     enabled: false,
   });
 
-  const handleChangeText = (text: string) => {
-    setQuery(text);
-  };
-
   useEffect(() => {
     if (query.length > 0) {
       refetch();
@@ -71,7 +66,7 @@ export default function Search() {
             <TextInput
               placeholder="Search for tracks..."
               placeholderTextColor={color.secondary}
-              onChangeText={handleChangeText}
+              onChangeText={setQuery}
               style={styles.searchInput}
               autoFocus
             />

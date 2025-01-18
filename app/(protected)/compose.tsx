@@ -9,32 +9,19 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Database } from "@/types/database.types";
 import { supabase } from "@/lib/supabase";
 import color from "@/constants/color";
+import { createPost } from "@/api/supabase";
 
 export default function Compose() {
   const { track } = useTrack();
-  const [note, setNote] = useState("");
-  const { user } = useAuth();
 
-  if (!track) {
-    router.back();
-    return null;
-  }
+  const [note, setNote] = useState("");
+
+  const { user } = useAuth();
 
   const queryClient = useQueryClient();
 
   const { mutateAsync, isPending } = useMutation({
-    mutationFn: async ({
-      profile_id,
-      track_id,
-      note,
-    }: Database["public"]["Tables"]["posts"]["Insert"]) => {
-      const { data, error } = await supabase
-        .from("posts")
-        .insert({ profile_id, track_id, note })
-        .select();
-      if (error) throw error;
-      return data;
-    },
+    mutationFn: createPost,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
     },
@@ -42,16 +29,22 @@ export default function Compose() {
 
   const handlePost = async () => {
     if (!user || !track) return;
+
     const data = await mutateAsync({
       profile_id: user.id,
       track_id: track.id,
       note: note,
     });
-    console.log(data);
+
     if (data) {
       router.replace("/(protected)/(tabs)");
     }
   };
+
+  if (!track) {
+    router.back();
+    return null;
+  }
 
   return (
     <View style={styles.container}>

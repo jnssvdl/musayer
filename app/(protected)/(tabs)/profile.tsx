@@ -3,26 +3,16 @@ import React from "react";
 import Button from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
 import color from "@/constants/color";
-import { supabase } from "@/lib/supabase";
 import { useQuery } from "@tanstack/react-query";
+import { getProfileWithPosts } from "@/api/supabase";
 
 export default function Profile() {
   const { user, signOut } = useAuth();
 
-  const { data, error, isLoading } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["profile", user?.id],
-    queryFn: async () => {
-      if (!user?.id) return null;
-
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("*, posts( * )")
-        .eq("id", user.id)
-        .single();
-
-      if (error) throw error;
-
-      return data;
+    queryFn: () => {
+      return getProfileWithPosts(user);
     },
   });
 
