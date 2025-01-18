@@ -68,19 +68,19 @@ export const updateProfile = async ({
   username,
 }: {
   user: User;
-  avatar: ImagePickerAsset;
+  avatar: ImagePickerAsset | null;
   displayName: string;
   username: string;
 }) => {
   let avatarUrl = null;
 
-  if (avatar.base64) {
+  if (avatar) {
     const extension = avatar.uri.split(".").pop()?.toLowerCase() ?? "jpeg";
     const path = `${Date.now()}.${extension}`;
 
     const { error } = await supabase.storage
       .from("avatars")
-      .upload(path, decode(avatar.base64), {
+      .upload(path, decode(avatar.base64 || ""), {
         contentType: "image/jpeg",
       });
 
@@ -101,5 +101,6 @@ export const updateProfile = async ({
       display_name: displayName,
       username: username,
     })
-    .eq("id", user.id);
+    .eq("id", user.id)
+    .select();
 };

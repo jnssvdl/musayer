@@ -14,6 +14,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { router } from "expo-router";
 import { updateProfile } from "@/api/supabase";
+import { configureProps } from "react-native-reanimated/lib/typescript/ConfigHelper";
 
 export default function OnboardingScreen() {
   const [displayName, setDisplayName] = useState("");
@@ -58,8 +59,6 @@ export default function OnboardingScreen() {
       Alert.alert("Invalid username");
       return;
     }
-
-    if (!avatar) return;
 
     const { error } = await mutateAsync({
       user,
