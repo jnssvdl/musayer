@@ -3,7 +3,7 @@ import TrackCard from "./track-card";
 import { Track } from "@/types/track";
 import text from "@/constants/text";
 
-type Post = {
+type PostCardProps = {
   track: Track | undefined;
   created_at: string;
   id: string;
@@ -17,7 +17,7 @@ type Post = {
   };
 };
 
-export default function PostCard({ post }: { post: Post }) {
+export default function PostCard({ post }: { post: PostCardProps }) {
   return (
     <View>
       <Text style={text.large}>{post.profiles.username}</Text>

@@ -1,12 +1,11 @@
 import Fab from "@/components/ui/fab";
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import { View, StyleSheet, FlatList } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Link } from "expo-router";
 import { useQuery } from "@tanstack/react-query";
 import { useToken } from "@/hooks/use-token";
 import PostCard from "@/components/post-card";
 import text from "@/constants/text";
-import color from "@/constants/color";
 import { getPosts } from "@/api/supabase";
 import { getSeveralTracks } from "@/api/spotify";
 

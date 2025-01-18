@@ -1,13 +1,18 @@
 import { View, Text, StyleSheet, Image } from "react-native";
 import React from "react";
 import Button from "@/components/ui/button";
-import { useAuth } from "@/hooks/use-auth";
 import color from "@/constants/color";
 import { useQuery } from "@tanstack/react-query";
 import { getProfileWithPosts } from "@/api/supabase";
+import useUser from "@/hooks/use-user";
+import { useAuth } from "@/hooks/use-auth";
 
 export default function Profile() {
-  const { user, signOut } = useAuth();
+  const { signOut } = useAuth();
+
+  const { user } = useAuth();
+
+  if (!user) return null;
 
   const { data, isLoading } = useQuery({
     queryKey: ["profile", user?.id],

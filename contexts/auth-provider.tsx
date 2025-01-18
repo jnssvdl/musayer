@@ -45,7 +45,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     if (user) {
       router.replace("/(protected)");
     } else {
-      router.replace("/(auth)/sign-in");
+      router.replace("/sign-in");
     }
   }, [user, router]);
 

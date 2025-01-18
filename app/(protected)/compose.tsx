@@ -1,13 +1,11 @@
-import { View, TextInput, Pressable, Text, StyleSheet } from "react-native";
+import { View, TextInput, Text, StyleSheet } from "react-native";
 import React, { useState } from "react";
 import { useTrack } from "@/hooks/use-track";
 import TrackCard from "@/components/track-card";
-import { Redirect, router, Stack } from "expo-router";
+import { router, Stack } from "expo-router";
 import Button from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Database } from "@/types/database.types";
-import { supabase } from "@/lib/supabase";
 import color from "@/constants/color";
 import { createPost } from "@/api/supabase";
 

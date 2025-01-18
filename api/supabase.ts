@@ -13,14 +13,10 @@ export const getPosts = async () => {
 
   if (error) throw error;
 
-  if (!posts || posts.length === 0) return [];
-
   return posts;
 };
 
-export const getProfileWithPosts = async (user: User | null) => {
-  if (!user) return null;
-
+export const getProfileWithPosts = async (user: User) => {
   const { data, error } = await supabase
     .from("profiles")
     .select("*, posts( * )")
@@ -48,8 +44,6 @@ export const createPost = async ({
 };
 
 export const getProfile = async (user: User) => {
-  if (!user) return;
-
   const { data, error } = await supabase
     .from("profiles")
     .select("*")

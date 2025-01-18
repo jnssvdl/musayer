@@ -1,6 +1,13 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, StyleSheet, Alert } from "react-native";
-import Button from "@/components/ui/button"; // Assuming Button is in the same folder
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+} from "react-native";
+import { Mail, Lock, Twitter } from "lucide-react-native";
 import { Link } from "expo-router";
 import { useAuth } from "@/hooks/use-auth";
 
@@ -30,11 +37,17 @@ export default function SignUp() {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.title}>Create Account</Text>
-        <Text style={styles.subtitle}>Sign up to get started</Text>
+        <View style={styles.header}>
+          <View style={styles.logoContainer}>
+            <Twitter width={32} height={32} color="#a1a1aa" />
+          </View>
+          <Text style={styles.title}>Create Account</Text>
+          <Text style={styles.subtitle}>Sign up to get started</Text>
+        </View>
 
         <View style={styles.form}>
           <View style={styles.inputContainer}>
+            <Mail color="#a1a1aa" size={20} style={styles.inputIcon} />
             <TextInput
               style={styles.input}
               placeholder="Email"
@@ -47,6 +60,7 @@ export default function SignUp() {
           </View>
 
           <View style={styles.inputContainer}>
+            <Lock color="#a1a1aa" size={20} style={styles.inputIcon} />
             <TextInput
               style={styles.input}
               placeholder="Password"
@@ -58,6 +72,7 @@ export default function SignUp() {
           </View>
 
           <View style={styles.inputContainer}>
+            <Lock color="#a1a1aa" size={20} style={styles.inputIcon} />
             <TextInput
               style={styles.input}
               placeholder="Confirm Password"
@@ -68,16 +83,16 @@ export default function SignUp() {
             />
           </View>
 
-          <Button
-            title="Sign Up"
-            style={styles.signUpButton}
-            onPress={handleSignUp}
-          />
+          <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+            <Text style={styles.buttonText}>Sign Up</Text>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.footer}>
           <Text style={styles.footerText}>Already have an account? </Text>
-          <Link href={"/(auth)/sign-in"}>Sign in</Link>
+          <Link href="/sign-in" asChild>
+            <Text style={styles.footerLink}>Sign in</Text>
+          </Link>
         </View>
       </View>
     </View>
@@ -87,78 +102,67 @@ export default function SignUp() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#14171A",
-    padding: 8,
-  },
-  content: {
-    flex: 1,
-    padding: 24,
+    backgroundColor: "#09090b",
+    padding: 20,
     justifyContent: "center",
   },
+  content: {
+    width: "100%",
+  },
+  header: {
+    alignItems: "center",
+    marginBottom: 40,
+  },
+  logoContainer: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: "#18181b",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 20,
+  },
   title: {
-    fontSize: 32,
+    fontSize: 24,
     fontWeight: "bold",
-    color: "#F5F8FA",
+    color: "#fff",
     marginBottom: 8,
   },
   subtitle: {
     fontSize: 16,
-    color: "#666",
-    marginBottom: 32,
+    color: "#a1a1aa",
   },
   form: {
     gap: 16,
   },
   inputContainer: {
-    borderWidth: 1,
-    borderColor: "#1C2127",
-    borderRadius: 12,
-    backgroundColor: "#1C2127",
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#18181b",
+    borderRadius: 8,
+    paddingHorizontal: 16,
+    height: 50,
+  },
+  inputIcon: {
+    marginRight: 12,
   },
   input: {
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    flex: 1,
+    color: "#fff",
     fontSize: 16,
-    color: "#F5F8FA",
   },
-  signUpButton: {
-    backgroundColor: "#E1E8ED",
-    borderRadius: 20,
-    paddingVertical: 12,
+  button: {
+    backgroundColor: "#a1a1aa",
+    height: 50,
+    borderRadius: 8,
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: 8,
   },
-  divider: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginVertical: 24,
-  },
-  line: {
-    flex: 1,
-    height: 1,
-    backgroundColor: "#666",
-  },
-  orText: {
-    marginHorizontal: 8,
-    color: "#666",
-  },
-  googleButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 16,
-    borderRadius: 12,
-    backgroundColor: "#1C2127",
-    borderWidth: 1,
-    borderColor: "#E1E8ED",
-  },
-  googleIcon: {
-    width: 24,
-    height: 24,
-    marginRight: 8,
-  },
-  googleButtonText: {
+  buttonText: {
+    color: "#09090b",
     fontSize: 16,
-    color: "#F5F8FA",
+    fontWeight: "bold",
   },
   footer: {
     flexDirection: "row",
@@ -166,12 +170,12 @@ const styles = StyleSheet.create({
     marginTop: 32,
   },
   footerText: {
-    color: "#666",
+    color: "#a1a1aa",
     fontSize: 14,
   },
-  signInText: {
-    color: "#E1E8ED",
+  footerLink: {
+    color: "#fff",
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: "500",
   },
 });
