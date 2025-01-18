@@ -7,9 +7,9 @@ type Post = {
   track: Track | undefined;
   created_at: string;
   id: string;
-  note: string;
-  track_id: string;
+  note: string | null;
   profile_id: string;
+  track_id: string;
   profiles: {
     username: string | null;
     display_name: string | null;
