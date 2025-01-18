@@ -32,7 +32,6 @@ export default function Home() {
         data={posts}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <PostCard post={item} />}
-        contentContainerStyle={styles.listContent}
       />
       <Fab>
         <Link href={"/(protected)/search"}>
@@ -59,9 +58,6 @@ const styles = StyleSheet.create({
     ...text.large,
     marginTop: 8,
     textAlign: "center",
-  },
-  listContent: {
-    padding: 16,
   },
   separator: {
     height: 16,

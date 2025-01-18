@@ -2,6 +2,7 @@ import { Tabs } from "expo-router";
 import React from "react";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import color from "@/constants/color";
+import { House, User2 } from "lucide-react-native";
 
 export default function TabLayout() {
   return (
@@ -31,17 +32,13 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          tabBarIcon: ({ color }) => (
-            <Ionicons name="home-sharp" size={32} color={color} />
-          ),
+          tabBarIcon: ({ color }) => <House color={color} />,
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
-          tabBarIcon: ({ color }) => (
-            <Ionicons name="person" size={32} color={color} />
-          ),
+          tabBarIcon: ({ color }) => <User2 color={color} />,
         }}
       />
     </Tabs>
