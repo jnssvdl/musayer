@@ -3,21 +3,19 @@ import React from "react";
 import Button from "@/components/ui/button";
 import color from "@/constants/color";
 import { useQuery } from "@tanstack/react-query";
-import { getProfileWithPosts } from "@/api/supabase";
+import { selectProfileWithPosts } from "@/api/supabase";
 import useUser from "@/hooks/use-user";
 import { useAuth } from "@/hooks/use-auth";
 
 export default function Profile() {
   const { signOut } = useAuth();
 
-  const { user } = useAuth();
-
-  if (!user) return null;
+  const user = useUser();
 
   const { data, isLoading } = useQuery({
-    queryKey: ["profile", user?.id],
+    queryKey: ["profile", user.id],
     queryFn: () => {
-      return getProfileWithPosts(user);
+      return selectProfileWithPosts(user);
     },
   });
 
@@ -44,17 +42,17 @@ const styles = StyleSheet.create({
     position: "relative",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: color.primary, // Matching the Home screen background color
+    backgroundColor: color.primary,
     padding: 16,
   },
   placeholderText: {
-    color: "red", // Matching the text color for the placeholder
+    color: "red",
     fontSize: 20,
     fontWeight: "600",
     textAlign: "center",
   },
   subText: {
-    color: "#E1E8ED", // Matching the sub-text color
+    color: "#E1E8ED",
     fontSize: 16,
     marginTop: 8,
     textAlign: "center",

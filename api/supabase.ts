@@ -4,7 +4,7 @@ import { User } from "@supabase/supabase-js";
 import { decode } from "base64-arraybuffer";
 import { ImagePickerAsset } from "expo-image-picker";
 
-export const getPosts = async () => {
+export const selectPosts = async () => {
   const { data: posts, error } = await supabase
     .from("posts")
     .select("*, profiles (username, display_name, avatar_url )")
@@ -16,7 +16,7 @@ export const getPosts = async () => {
   return posts;
 };
 
-export const getProfileWithPosts = async (user: User) => {
+export const selectProfileWithPosts = async (user: User) => {
   const { data, error } = await supabase
     .from("profiles")
     .select("*, posts( * )")
@@ -43,7 +43,7 @@ export const createPost = async ({
   return data;
 };
 
-export const getProfile = async (user: User) => {
+export const selectProfile = async (user: User) => {
   const { data, error } = await supabase
     .from("profiles")
     .select("*")

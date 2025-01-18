@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useToken } from "@/hooks/use-token";
 import PostCard from "@/components/post-card";
 import text from "@/constants/text";
-import { getPosts } from "@/api/supabase";
+import { selectPosts } from "@/api/supabase";
 import { getSeveralTracks } from "@/api/spotify";
 
 export default function Home() {
@@ -15,7 +15,7 @@ export default function Home() {
   const { data: posts } = useQuery({
     queryKey: ["posts"],
     queryFn: async () => {
-      const posts = await getPosts();
+      const posts = await selectPosts();
       const ids = Array.from(new Set(posts.map((post) => post.track_id)));
       const tracks = await getSeveralTracks(ids, token);
       const map = new Map(tracks.map((track) => [track.id, track]));
