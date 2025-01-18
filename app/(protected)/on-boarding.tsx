@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Image,
   StyleSheet,
+  Alert,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { Ionicons } from "@expo/vector-icons";
@@ -52,28 +53,36 @@ export default function OnboardingScreen() {
       displayName: string;
       username: string;
     }) => {
-      const ext = uri?.split(".").pop()?.toLowerCase() ?? "jpeg";
-      const path = `${Date.now()}.${ext}`;
+      let avatarUrl = null;
 
-      const { error } = await supabase.storage
-        .from("avatars")
-        .upload(path, decode(base64), {
-          contentType: "image/jpeg",
-        });
+      if (base64) {
+        const extension = uri?.split(".").pop()?.toLowerCase() ?? "jpeg";
+        const path = `${Date.now()}.${extension}`;
 
-      if (error) throw error;
-      const {
-        data: { publicUrl },
-      } = supabase.storage.from("avatars").getPublicUrl(path);
+        const { error } = await supabase.storage
+          .from("avatars")
+          .upload(path, decode(base64), {
+            contentType: "image/jpeg",
+          });
 
+        if (error) throw error;
+
+        const {
+          data: { publicUrl },
+        } = supabase.storage.from("avatars").getPublicUrl(path);
+
+        avatarUrl = publicUrl;
+      }
+
+      // Update the profile in the database
       return await supabase
         .from("profiles")
         .update({
-          avatar_url: publicUrl,
+          avatar_url: avatarUrl,
           display_name: displayName,
           username: username,
         })
-        .eq("id", user?.id);
+        .eq("id", user.id);
     },
     onMutate: () => {
       queryClient.invalidateQueries({ queryKey: ["profile", user?.id] });
@@ -82,7 +91,24 @@ export default function OnboardingScreen() {
 
   const handleSubmit = async () => {
     if (!user) return;
-    const response = await mutateAsync({ user, base64, displayName, username });
+
+    if (!displayName || !username) {
+      Alert.alert("Display name or username cannot be blank");
+      return;
+    }
+
+    const { error } = await mutateAsync({
+      user,
+      base64,
+      displayName,
+      username,
+    });
+
+    if (error) {
+      Alert.alert("Username is already taken");
+      return;
+    }
+
     router.replace("/(protected)/(tabs)");
   };
 
