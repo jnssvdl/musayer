@@ -16,12 +16,13 @@ export const selectPosts = async () => {
   return posts;
 };
 
-export const selectProfileWithPosts = async (user: User) => {
+export const selectUserPosts = async (user: User) => {
   const { data, error } = await supabase
-    .from("profiles")
-    .select("*, posts( * )")
+    .from("posts")
+    .select("*, profiles (username, display_name, avatar_url )")
     .eq("id", user.id)
-    .single();
+    .order("created_at", { ascending: false })
+    .limit(50);
 
   if (error) throw error;
 

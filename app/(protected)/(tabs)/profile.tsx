@@ -1,37 +1,86 @@
-import { View, Text, StyleSheet, Image } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  ActivityIndicator,
+  ScrollView,
+  TouchableOpacity,
+  FlatList,
+} from "react-native";
 import React from "react";
-import Button from "@/components/ui/button";
 import color from "@/constants/color";
 import { useQuery } from "@tanstack/react-query";
-import { selectProfileWithPosts } from "@/api/supabase";
+import { selectProfile, selectUserPosts } from "@/api/supabase";
 import useUser from "@/hooks/use-user";
 import { useAuth } from "@/hooks/use-auth";
+import text from "@/constants/text";
+import { getSeveralTracks } from "@/api/spotify";
+import { useToken } from "@/hooks/use-token";
+import PostCard from "@/components/post-card";
 
 export default function Profile() {
   const { signOut } = useAuth();
 
   const user = useUser();
 
-  const { data, isLoading } = useQuery({
+  const { data: token } = useToken();
+
+  const {
+    data: profile,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ["profile", user.id],
-    queryFn: () => {
-      return selectProfileWithPosts(user);
+    queryFn: () => selectProfile(user),
+  });
+
+  const { data: posts } = useQuery({
+    queryKey: ["posts"],
+    queryFn: async () => {
+      const posts = await selectUserPosts(user);
+      const ids = Array.from(new Set(posts.map((post) => post.track_id)));
+      const tracks = await getSeveralTracks(ids, token);
+      const map = new Map(tracks.map((track) => [track.id, track]));
+      return posts.map((post) => ({
+        ...post,
+        track: map.get(post.track_id),
+      }));
     },
   });
 
   return (
     <View style={styles.container}>
-      {data?.avatar_url && (
-        <Image source={{ uri: data.avatar_url }} style={styles.avatar} />
-      )}
-
-      {data?.display_name && (
-        <Text style={styles.name}>{data.display_name}</Text>
-      )}
-
-      {data?.username && <Text style={styles.username}>@{data.username}</Text>}
-
-      <Button title="Sign out" onPress={signOut} />
+      <FlatList
+        data={posts}
+        keyExtractor={(item) => item.id}
+        ListHeaderComponent={
+          <View style={styles.header}>
+            {profile?.avatar_url ? (
+              <Image
+                source={{ uri: profile.avatar_url }}
+                style={styles.avatar}
+              />
+            ) : (
+              <View style={styles.placeholderAvatar}>
+                <Text style={text.large}>?</Text>
+              </View>
+            )}
+            <View style={styles.headerInfo}>
+              <Text style={text.large}>
+                {profile?.display_name || "Anonymous"}
+              </Text>
+              <Text style={text.medium}>@{profile?.username || "unknown"}</Text>
+              {profile?.bio && <Text style={text.small}>{profile?.bio}</Text>}
+            </View>
+            <TouchableOpacity style={styles.signOutButton} onPress={signOut}>
+              <Text style={text.medium}>Sign Out</Text>
+            </TouchableOpacity>
+          </View>
+        }
+        renderItem={({ item }) => <PostCard post={item} />}
+        ListFooterComponent={<View style={{ height: 20 }} />}
+      />
     </View>
   );
 }
@@ -39,45 +88,46 @@ export default function Profile() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    position: "relative",
+    backgroundColor: color.primary,
+  },
+  centered: {
+    flex: 1,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: color.primary,
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
     padding: 16,
-  },
-  placeholderText: {
-    color: "red",
-    fontSize: 20,
-    fontWeight: "600",
-    textAlign: "center",
-  },
-  subText: {
-    color: "#E1E8ED",
-    fontSize: 16,
-    marginTop: 8,
-    textAlign: "center",
-  },
-  das: {
-    color: "blue",
+    backgroundColor: color.primary,
+    borderBottomWidth: 0.5,
+    borderColor: "#27272a",
   },
   avatar: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    marginBottom: 16,
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    marginRight: 16,
   },
-  name: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 8,
+  placeholderAvatar: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: color.secondary,
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 16,
   },
-  username: {
-    fontSize: 16,
-    color: "#666",
-    marginBottom: 8,
+  headerInfo: {
+    flex: 1,
   },
-  website: {
-    fontSize: 16,
-    color: "#0066cc",
+  signOutButton: {
+    backgroundColor: color.secondary,
+    padding: 8,
+    borderRadius: 8,
+  },
+  posts: {
+    padding: 16,
   },
 });
