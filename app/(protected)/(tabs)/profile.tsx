@@ -36,7 +36,7 @@ export default function Profile() {
   });
 
   const { data: posts } = useQuery({
-    queryKey: ["posts"],
+    queryKey: ["profile-posts"],
     queryFn: async () => {
       const posts = await selectUserPosts(user);
       const ids = Array.from(new Set(posts.map((post) => post.track_id)));
@@ -56,26 +56,27 @@ export default function Profile() {
         keyExtractor={(item) => item.id}
         ListHeaderComponent={
           <View style={styles.header}>
-            {profile?.avatar_url ? (
-              <Image
-                source={{ uri: profile.avatar_url }}
-                style={styles.avatar}
-              />
-            ) : (
-              <View style={styles.placeholderAvatar}>
-                <Text style={text.large}>?</Text>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              {profile?.avatar_url ? (
+                <Image
+                  source={{ uri: profile.avatar_url }}
+                  style={styles.avatar}
+                />
+              ) : (
+                <View style={styles.placeholderAvatar}>
+                  <Text style={text.large}>?</Text>
+                </View>
+              )}
+              <View style={styles.headerInfo}>
+                <Text style={text.large}>
+                  {profile?.display_name || "Anonymous"}
+                </Text>
+                <Text style={text.medium}>
+                  @{profile?.username || "unknown"}
+                </Text>
               </View>
-            )}
-            <View style={styles.headerInfo}>
-              <Text style={text.large}>
-                {profile?.display_name || "Anonymous"}
-              </Text>
-              <Text style={text.medium}>@{profile?.username || "unknown"}</Text>
-              {profile?.bio && <Text style={text.small}>{profile?.bio}</Text>}
             </View>
-            <TouchableOpacity style={styles.signOutButton} onPress={signOut}>
-              <Text style={text.medium}>Sign Out</Text>
-            </TouchableOpacity>
+            {profile?.bio && <Text style={text.small}>{profile?.bio}</Text>}
           </View>
         }
         renderItem={({ item }) => <PostCard post={item} />}
@@ -97,9 +98,8 @@ const styles = StyleSheet.create({
     backgroundColor: color.primary,
   },
   header: {
-    flexDirection: "row",
-    alignItems: "center",
     padding: 16,
+    gap: 8,
     backgroundColor: color.primary,
     borderBottomWidth: 0.5,
     borderColor: "#27272a",

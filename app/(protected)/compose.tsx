@@ -6,18 +6,17 @@ import { router, Stack } from "expo-router";
 import Button from "@/components/ui/button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import color from "@/constants/color";
-import { createPost } from "@/api/supabase";
+import { createPost, updatePost } from "@/api/supabase";
 import useUser from "@/hooks/use-user";
+import { Database } from "@/types/database.types";
 
 export default function Compose() {
-  const { track } = useTrack();
+  const { track, note, setNote, id } = useTrack();
 
   if (!track) {
     router.back();
     return null;
   }
-
-  const [note, setNote] = useState("");
 
   const user = useUser();
 
@@ -30,13 +29,27 @@ export default function Compose() {
     },
   });
 
-  const handlePost = async () => {
-    const data = await mutateAsync({
-      profile_id: user.id,
-      track_id: track.id,
-      note: note,
-    });
+  const poster = useMutation({
+    mutationFn: (post: Database["public"]["Tables"]["posts"]["Update"]) =>
+      updatePost(post),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+    },
+  });
 
+  const handlePost = async () => {
+    if (!note) {
+      const data = await mutateAsync({
+        profile_id: user.id,
+        track_id: track.id,
+        note: note,
+      });
+      if (data) {
+        router.replace("/(protected)/(tabs)");
+      }
+    }
+    const data = await poster.mutateAsync({ id: id, note: note });
+    console.log(data);
     if (data) {
       router.replace("/(protected)/(tabs)");
     }

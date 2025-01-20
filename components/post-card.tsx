@@ -6,6 +6,7 @@ import { Track } from "@/types/track";
 import text from "@/constants/text";
 import color from "@/constants/color";
 import useUser from "@/hooks/use-user";
+import PostMenu from "./post-menu";
 
 type PostCardProps = {
   track: Track | undefined;
@@ -45,9 +46,10 @@ export default function PostCard({ post }: { post: PostCardProps }) {
           </View>
           <Text style={text.medium}>@{post.profiles.username}</Text>
         </View>
-        <TouchableOpacity>
+        <PostMenu post={post} />
+        {/* <TouchableOpacity>
           <EllipsisVertical color={"#3f3f46"} size={16} />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
       {post.note && <Text style={text.small}>{post.note}</Text>}
       {post.track && <TrackCard track={post.track} />}

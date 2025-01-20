@@ -7,7 +7,7 @@ import { ImagePickerAsset } from "expo-image-picker";
 export const selectPosts = async () => {
   const { data: posts, error } = await supabase
     .from("posts")
-    .select("*, profiles (username, display_name, avatar_url )")
+    .select("*, profiles ( username, display_name, avatar_url )")
     .order("created_at", { ascending: false })
     .limit(50);
 
@@ -19,8 +19,8 @@ export const selectPosts = async () => {
 export const selectUserPosts = async (user: User) => {
   const { data, error } = await supabase
     .from("posts")
-    .select("*, profiles (username, display_name, avatar_url )")
-    .eq("id", user.id)
+    .select("*, profiles ( username, display_name, avatar_url )")
+    .eq("profile_id", user.id)
     .order("created_at", { ascending: false })
     .limit(50);
 
@@ -98,4 +98,33 @@ export const updateProfile = async ({
     })
     .eq("id", user.id)
     .select();
+};
+
+export const updatePost = async (
+  post: Database["public"]["Tables"]["posts"]["Update"]
+) => {
+  if (!post.id) return;
+  const { data, error } = await supabase
+    .from("posts")
+    .update(post)
+    .eq("id", post.id)
+    .select();
+
+  if (error) throw error;
+
+  return data;
+};
+
+export const deletePost = async (id: string) => {
+  const { data, error } = await supabase
+    .from("posts")
+    .delete()
+    .eq("id", id)
+    .select();
+
+  console.log(data);
+
+  if (error) throw error;
+
+  return data;
 };
