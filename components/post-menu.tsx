@@ -5,21 +5,12 @@ import {
   TouchableOpacity,
   StyleSheet,
   Modal,
-  TextInput,
   Alert,
 } from "react-native";
-import {
-  EllipsisVertical,
-  Notebook,
-  Pencil,
-  Trash2,
-} from "lucide-react-native";
+import { EllipsisVertical, Pencil, Trash2 } from "lucide-react-native";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import color from "@/constants/color";
-import text from "@/constants/text";
 import useUser from "@/hooks/use-user";
-import { deletePost, updatePost } from "@/api/supabase";
-import { Post } from "@/types/post";
+import { deletePost } from "@/api/supabase";
 import { useTrack } from "@/hooks/use-track";
 import { Track } from "@/types/track";
 import { router } from "expo-router";
@@ -135,7 +126,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   menuContainer: {
-    backgroundColor: color.primary,
+    backgroundColor: "#09090b",
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
     padding: 16,
@@ -153,8 +144,8 @@ const styles = StyleSheet.create({
     paddingTop: 16,
   },
   menuText: {
-    ...text.medium,
-    fontSize: 16,
+    fontSize: 14,
+    color: "#71717a",
   },
   deleteText: {
     color: "#ef4444",
@@ -166,7 +157,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   editModalContent: {
-    backgroundColor: color.primary,
+    backgroundColor: "#09090b",
     borderRadius: 12,
     padding: 16,
     gap: 16,
@@ -175,7 +166,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   input: {
-    backgroundColor: color.secondary,
+    backgroundColor: "#3f3f46",
     borderRadius: 8,
     padding: 12,
     color: "white",
@@ -194,14 +185,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   cancelButton: {
-    backgroundColor: color.secondary,
+    backgroundColor: "#3f3f46",
   },
   saveButton: {
     backgroundColor: "#3b82f6",
   },
   buttonText: {
-    ...text.medium,
-    fontSize: 16,
+    fontSize: 14,
+    color: "#71717a",
   },
   saveButtonText: {
     color: "#ffffff",

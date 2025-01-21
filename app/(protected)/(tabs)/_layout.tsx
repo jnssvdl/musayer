@@ -1,7 +1,5 @@
 import { Tabs } from "expo-router";
 import React from "react";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import color from "@/constants/color";
 import { House, User2 } from "lucide-react-native";
 
 export default function TabLayout() {
@@ -11,7 +9,7 @@ export default function TabLayout() {
         tabBarStyle: {
           backgroundColor: "#09090b", // Dark background color for tab bar
           borderTopWidth: 0.2,
-          borderColor: color.secondary,
+          borderColor: "#3f3f46",
         },
         tabBarActiveTintColor: "#F5F8FA", // Active tab color (white)
         tabBarInactiveTintColor: "#A0AAB2", // Inactive tab color (light grey)

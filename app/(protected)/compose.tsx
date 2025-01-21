@@ -1,11 +1,10 @@
-import { View, TextInput, Text, StyleSheet } from "react-native";
-import React, { useState } from "react";
+import { View, TextInput, Text } from "react-native";
+import React from "react";
 import { useTrack } from "@/hooks/use-track";
 import TrackCard from "@/components/track-card";
 import { router, Stack } from "expo-router";
 import Button from "@/components/ui/button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import color from "@/constants/color";
 import { createPost, updatePost } from "@/api/supabase";
 import useUser from "@/hooks/use-user";
 import { Database } from "@/types/database.types";
@@ -19,7 +18,6 @@ export default function Compose() {
   }
 
   const user = useUser();
-
   const queryClient = useQueryClient();
 
   const { mutateAsync, isPending } = useMutation({
@@ -49,32 +47,31 @@ export default function Compose() {
       }
     }
     const data = await poster.mutateAsync({ id: id, note: note });
-    console.log(data);
     if (data) {
       router.replace("/(protected)/(tabs)");
     }
   };
 
   return (
-    <View style={styles.container}>
+    <View className="flex-1 bg-zinc-950 p-4">
       <Stack.Screen
         options={{
           headerRight: () => (
-            <Button title={"Post"} disabled={isPending} onPress={handlePost} />
+            <Button title="Post" disabled={isPending} onPress={handlePost} />
           ),
           title: "Compose",
         }}
       />
 
-      <View style={styles.content}>
+      <View className="flex-1">
         <TrackCard track={track} />
 
-        <View style={styles.inputContainer}>
+        <View className="p-4">
           <TextInput
             multiline
             placeholder="What's on your mind about this track?"
-            placeholderTextColor="#657786"
-            style={styles.input}
+            placeholderTextColor="#3f3f46"
+            className="text-zinc-100 text-base leading-6 min-h-[120px] align-top p-0"
             value={note}
             onChangeText={setNote}
             numberOfLines={6}
@@ -82,40 +79,10 @@ export default function Compose() {
           />
         </View>
 
-        <View style={styles.characterCount}>
-          <Text style={styles.characterCountText}>{note.length}/280</Text>
+        <View className="px-4 items-end">
+          <Text className="text-zinc-500 text-sm">{note.length}/280</Text>
         </View>
       </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: color.primary,
-    padding: 8,
-  },
-  content: {
-    flex: 1,
-  },
-  inputContainer: {
-    padding: 16,
-  },
-  input: {
-    color: "#F5F8FA",
-    fontSize: 16,
-    lineHeight: 24,
-    minHeight: 120,
-    textAlignVertical: "top",
-    padding: 0,
-  },
-  characterCount: {
-    padding: 16,
-    alignItems: "flex-end",
-  },
-  characterCountText: {
-    color: "#657786",
-    fontSize: 14,
-  },
-});

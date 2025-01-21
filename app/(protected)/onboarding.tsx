@@ -1,20 +1,14 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Image,
-  StyleSheet,
-  Alert,
-} from "react-native";
+import { View, Text, TouchableOpacity, Image, Alert } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "@/hooks/use-auth";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { router } from "expo-router";
 import { updateProfile } from "@/api/supabase";
 import useUser from "@/hooks/use-user";
+import Input from "@/components/ui/input";
+import Button from "@/components/ui/button";
+import { Camera } from "lucide-react-native";
 
 export default function OnboardingScreen() {
   const [displayName, setDisplayName] = useState("");
@@ -31,7 +25,7 @@ export default function OnboardingScreen() {
       allowsEditing: true,
       aspect: [1, 1],
       quality: 1,
-      base64: true, // Enable base64 encoding
+      base64: true,
     });
 
     if (!result.canceled && result.assets[0].base64) {
@@ -44,7 +38,7 @@ export default function OnboardingScreen() {
   const { mutateAsync } = useMutation({
     mutationFn: updateProfile,
     onMutate: () => {
-      queryClient.invalidateQueries({ queryKey: ["profile", user?.id] });
+      queryClient.invalidateQueries({ queryKey: ["profile", user.id] });
     },
   });
 
@@ -75,126 +69,47 @@ export default function OnboardingScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.content}>
-        <View style={styles.header}>
-          <Text style={styles.title}>Create Your Profile</Text>
-          <Text style={styles.subtitle}>Let's get to know you better</Text>
-        </View>
+    <View className="flex-1 bg-zinc-950 justify-center p-5">
+      <View className="items-center mb-8">
+        <Text className="text-2xl font-bold text-white mb-2">
+          Create your profile
+        </Text>
+        <Text className="text-base text-zinc-400">
+          Let's get to know you better
+        </Text>
+      </View>
 
-        <TouchableOpacity onPress={pickImage} style={styles.imageContainer}>
-          {avatar ? (
-            <Image source={{ uri: avatar.uri }} style={styles.profileImage} />
-          ) : (
-            <View style={styles.imagePlaceholder}>
-              <Ionicons name="camera" size={40} color="#6b7280" />
-              <Text style={styles.imagePlaceholderText}>Add Photo</Text>
-            </View>
-          )}
-        </TouchableOpacity>
-
-        <View style={styles.form}>
-          <TextInput
-            style={styles.input}
-            value={displayName}
-            onChangeText={setDisplayName}
-            placeholder="Display name"
-            placeholderTextColor="#6b7280"
+      <TouchableOpacity onPress={pickImage} className="self-center mb-8">
+        {avatar ? (
+          <Image
+            source={{ uri: avatar.uri }}
+            className="w-[150px] h-[150px] rounded-full border-3 border-zinc-600"
           />
+        ) : (
+          <View className="w-[150px] h-[150px] rounded-full bg-zinc-900 border-3 border-zinc-600 justify-center items-center">
+            <Camera size={40} color="#6b7280" />
+            <Text className="text-zinc-400 text-sm mt-2">Add photo</Text>
+          </View>
+        )}
+      </TouchableOpacity>
 
-          <TextInput
-            style={styles.input}
-            value={username}
-            onChangeText={setUsername}
-            placeholder="Username"
-            placeholderTextColor="#6b7280"
-            autoCapitalize="none"
-          />
-
-          <TouchableOpacity style={styles.button} onPress={handleUpdate}>
-            <Text style={styles.buttonText}>Complete Profile</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={signOut}>
-            <Text style={styles.buttonText}>Sign out</Text>
-          </TouchableOpacity>
-        </View>
+      <View className="gap-4">
+        <Input
+          value={displayName}
+          onChangeText={setDisplayName}
+          placeholder="Display name"
+          placeholderTextColor="#6b7280"
+        />
+        <Input
+          value={username}
+          onChangeText={setUsername}
+          placeholder="Username"
+          placeholderTextColor="#6b7280"
+          autoCapitalize="none"
+        />
+        <Button title="Get started" onPress={handleUpdate} />
+        <Button title="Sign out" onPress={signOut} />
       </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#09090b",
-  },
-  content: {
-    flex: 1,
-    padding: 20,
-    justifyContent: "center",
-  },
-  header: {
-    marginBottom: 32,
-    alignItems: "center",
-  },
-  title: {
-    fontSize: 26,
-    fontWeight: "bold",
-    color: "#ffffff",
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: "#a1a1aa",
-  },
-  imageContainer: {
-    alignSelf: "center",
-    marginBottom: 32,
-  },
-  profileImage: {
-    width: 150,
-    height: 150,
-    borderRadius: 75,
-    borderWidth: 3,
-    borderColor: "#3f3f46",
-  },
-  imagePlaceholder: {
-    width: 150,
-    height: 150,
-    borderRadius: 75,
-    backgroundColor: "#18181b",
-    borderWidth: 3,
-    borderColor: "#3f3f46",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  imagePlaceholderText: {
-    color: "#a1a1aa",
-    fontSize: 14,
-    marginTop: 8,
-  },
-  form: {
-    gap: 16,
-  },
-  input: {
-    backgroundColor: "#18181b",
-    height: 50,
-    borderRadius: 8,
-    paddingHorizontal: 16,
-    color: "#ffffff",
-    fontSize: 16,
-  },
-  button: {
-    backgroundColor: "#3b82f6",
-    height: 50,
-    borderRadius: 25,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 8,
-  },
-  buttonText: {
-    color: "#ffffff",
-    fontSize: 16,
-    fontWeight: "600",
-  },
-});

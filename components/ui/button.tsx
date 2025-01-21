@@ -1,58 +1,36 @@
-import {
-  Text,
-  Pressable,
-  StyleSheet,
-  PressableProps,
-  StyleProp,
-  ViewStyle,
-} from "react-native";
 import React from "react";
+import {
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  TouchableOpacityProps,
+} from "react-native";
 
-interface ButtonProps extends PressableProps {
+interface ButtonProps extends TouchableOpacityProps {
   title: string;
-  style?: StyleProp<ViewStyle>; // Add proper typing for the style prop
 }
 
-export default function Button({
-  title,
-  style,
-  disabled,
-  ...props
-}: ButtonProps) {
+const Button: React.FC<ButtonProps> = ({ title, ...props }) => {
   return (
-    <Pressable
-      style={({ pressed }) => {
-        return [
-          styles.button,
-          pressed && styles.pressed,
-          disabled && styles.disabled,
-          style,
-        ];
-      }}
-      disabled={disabled}
-      {...props}
-    >
+    <TouchableOpacity style={styles.button} {...props}>
       <Text style={styles.text}>{title}</Text>
-    </Pressable>
+    </TouchableOpacity>
   );
-}
+};
 
 const styles = StyleSheet.create({
   button: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
-    backgroundColor: "#E1E8ED",
-  },
-  pressed: {
-    opacity: 0.8,
-  },
-  disabled: {
-    opacity: 0.4,
+    backgroundColor: "#D3D3D3",
+    padding: 12,
+    borderRadius: 30,
+    alignItems: "center",
+    justifyContent: "center",
   },
   text: {
-    color: "#14171A",
-    fontWeight: "600",
-    fontSize: 14,
+    color: "#000000",
+    fontSize: 16,
+    fontWeight: "500",
   },
 });
+
+export default Button;

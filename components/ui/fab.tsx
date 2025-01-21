@@ -3,16 +3,15 @@ import {
   StyleSheet,
   TouchableOpacity,
   TouchableOpacityProps,
-  ViewStyle,
 } from "react-native";
 
 interface FabProps extends TouchableOpacityProps {
-  style?: ViewStyle;
+  children: React.ReactNode;
 }
 
-export default function Fab({ children, style, ...props }: FabProps) {
+export default function Fab({ children, ...props }: FabProps) {
   return (
-    <TouchableOpacity style={[styles.button, style]} {...props}>
+    <TouchableOpacity style={styles.button} {...props}>
       {children}
     </TouchableOpacity>
   );
@@ -23,7 +22,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 16,
     bottom: 16,
-    backgroundColor: "#059669",
     width: 56,
     height: 56,
     borderRadius: 28,
@@ -33,9 +31,9 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 3,
+      height: 4,
     },
     shadowOpacity: 0.1,
-    shadowRadius: 5,
+    shadowRadius: 4,
   },
 });

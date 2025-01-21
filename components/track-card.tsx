@@ -1,8 +1,6 @@
 import { View, Text, StyleSheet, Image } from "react-native";
 import React from "react";
 import { Track } from "@/types/track";
-import text from "@/constants/text";
-import color from "@/constants/color";
 
 type TrackCardProps = {
   track: Track;
@@ -18,10 +16,8 @@ export default function TrackCard({ track }: TrackCardProps) {
         />
       )}
       <View style={styles.info}>
-        <Text numberOfLines={1} style={text.large}>
-          {track.name}
-        </Text>
-        <Text numberOfLines={1} style={text.medium}>
+        <Text numberOfLines={1}>{track.name}</Text>
+        <Text numberOfLines={1}>
           {track.artists.map((artist) => artist.name).join(", ")}
         </Text>
       </View>
@@ -36,7 +32,7 @@ const styles = StyleSheet.create({
     gap: 12,
     padding: 8,
     borderWidth: 0.2,
-    borderColor: color.secondary,
+    borderColor: "#3f3f46",
     borderRadius: 10,
   },
   albumCover: {

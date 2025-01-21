@@ -1,10 +1,8 @@
 import {
   View,
   Text,
-  TextInput,
   FlatList,
   Pressable,
-  StyleSheet,
   ActivityIndicator,
 } from "react-native";
 import { useEffect, useState } from "react";
@@ -14,8 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Track } from "@/types/track";
 import TrackCard from "@/components/track-card";
 import { useTrack } from "@/hooks/use-track";
-import text from "@/constants/text";
-import color from "@/constants/color";
+import Input from "@/components/ui/input";
 
 export default function Search() {
   const [query, setQuery] = useState("");
@@ -60,15 +57,13 @@ export default function Search() {
   }, [query]);
 
   return (
-    <View style={styles.container}>
+    <View className="flex-1 bg-zinc-950 p-2">
       <Stack.Screen
         options={{
           headerTitle: () => (
-            <TextInput
+            <Input
               placeholder="Search for tracks..."
-              placeholderTextColor={color.secondary}
               onChangeText={setQuery}
-              style={styles.searchInput}
               autoFocus
             />
           ),
@@ -76,14 +71,18 @@ export default function Search() {
       />
 
       {isLoading ? (
-        <View style={styles.loading}>
+        <View className="flex-1 justify-center items-center">
           <ActivityIndicator color="#E1E8ED" size="large" />
-          <Text style={text.medium}>Searching tracks...</Text>
+          <Text className="text-zinc-400">Searching tracks...</Text>
         </View>
       ) : query.length === 0 ? (
-        <View style={styles.emptyContainer}>
-          <Text style={text.large}>Start typing to search</Text>
-          <Text style={text.medium}>Find your favorite tracks</Text>
+        <View className="flex-1 justify-center items-center">
+          <Text className="text-zinc-400 text-base">
+            Start typing to search
+          </Text>
+          <Text className="text-zinc-500 text-sm">
+            Find your favorite tracks
+          </Text>
         </View>
       ) : (
         <FlatList
@@ -95,58 +94,14 @@ export default function Search() {
                 setTrack(track);
                 router.push("/(protected)/compose");
               }}
-              style={({ pressed }) => [
-                styles.pressable,
-                pressed && styles.pressed,
-              ]}
+              className="overflow-hidden active:opacity-80"
             >
               <TrackCard track={track} />
             </Pressable>
           )}
           contentContainerStyle={{ gap: 6 }}
-          ListEmptyComponent={
-            query.length === 0 ? (
-              <View style={styles.emptyContainer}>
-                <Text style={text.large}>Start typing to search</Text>
-                <Text style={text.medium}>Find your favorite tracks</Text>
-              </View>
-            ) : null
-          }
         />
       )}
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: color.primary,
-    padding: 8,
-  },
-  searchInput: {
-    backgroundColor: "#18181b",
-    borderRadius: 8,
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    ...text.small,
-  },
-  loading: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 16,
-  },
-  emptyContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 8,
-  },
-  pressable: {
-    overflow: "hidden",
-  },
-  pressed: {
-    opacity: 0.8,
-  },
-});

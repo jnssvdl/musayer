@@ -1,11 +1,8 @@
 import React from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
-import { EllipsisVertical, UserIcon } from "lucide-react-native";
+import { UserIcon } from "lucide-react-native";
 import TrackCard from "./track-card";
 import { Track } from "@/types/track";
-import text from "@/constants/text";
-import color from "@/constants/color";
-import useUser from "@/hooks/use-user";
 import PostMenu from "./post-menu";
 
 type PostCardProps = {
@@ -33,25 +30,54 @@ export default function PostCard({ post }: { post: PostCardProps }) {
           />
         ) : (
           <View style={styles.placeholderAvatar}>
-            <UserIcon color={color.primary} size={24} />
+            <UserIcon color={"#09090b"} size={24} />
           </View>
         )}
         <View style={styles.headerInfo}>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-            <Text style={text.large}>{post.profiles.display_name}</Text>
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: "bold",
+                color: "#f4f4f5",
+              }}
+            >
+              {post.profiles.display_name}
+            </Text>
             <Text style={{ fontSize: 8, color: "#3f3f46" }}>{"\u2B24"}</Text>
-            <Text style={[text.medium, { fontSize: 12 }]}>
+            <Text
+              style={{
+                fontSize: 14,
+                color: "#71717a",
+              }}
+            >
               {new Date(post.created_at).toLocaleDateString()}
             </Text>
           </View>
-          <Text style={text.medium}>@{post.profiles.username}</Text>
+          <Text
+            style={{
+              fontSize: 14,
+              color: "#71717a",
+            }}
+          >
+            @{post.profiles.username}
+          </Text>
         </View>
         <PostMenu post={post} />
         {/* <TouchableOpacity>
           <EllipsisVertical color={"#3f3f46"} size={16} />
         </TouchableOpacity> */}
       </View>
-      {post.note && <Text style={text.small}>{post.note}</Text>}
+      {post.note && (
+        <Text
+          style={{
+            fontSize: 14,
+            color: "#fafafa",
+          }}
+        >
+          {post.note}
+        </Text>
+      )}
       {post.track && <TrackCard track={post.track} />}
     </View>
   );
@@ -59,7 +85,7 @@ export default function PostCard({ post }: { post: PostCardProps }) {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: color.primary,
+    backgroundColor: "#09090b",
     borderBottomWidth: 0.5,
     borderColor: "#27272a",
     padding: 12,
@@ -78,7 +104,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: color.secondary,
+    backgroundColor: "#3f3f46",
     alignItems: "center",
     justifyContent: "center",
   },

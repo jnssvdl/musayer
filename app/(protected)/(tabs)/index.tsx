@@ -5,7 +5,6 @@ import { Link } from "expo-router";
 import { useQuery } from "@tanstack/react-query";
 import { useToken } from "@/hooks/use-token";
 import PostCard from "@/components/post-card";
-import text from "@/constants/text";
 import { selectPosts } from "@/api/supabase";
 import { getSeveralTracks } from "@/api/spotify";
 
@@ -55,7 +54,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   subText: {
-    ...text.large,
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#f4f4f5",
     marginTop: 8,
     textAlign: "center",
   },

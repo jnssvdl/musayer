@@ -1,15 +1,10 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  Alert,
-} from "react-native";
-import { Mail, Lock, Twitter } from "lucide-react-native";
+import { View, Text, Alert } from "react-native";
+import { Mail, Lock } from "lucide-react-native";
 import { Link } from "expo-router";
 import { useAuth } from "@/hooks/use-auth";
+import Input from "@/components/ui/input";
+import Button from "@/components/ui/button";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
@@ -29,22 +24,21 @@ export default function SignIn() {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.logoContainer}>
-          <Twitter width={32} height={32} color="#a1a1aa" />
-        </View>
-        <Text style={styles.title}>Welcome back</Text>
-        <Text style={styles.subtitle}>Sign in to continue</Text>
+    <View className="flex-1 bg-zinc-950 p-5 justify-center">
+      <View className="items-center mb-10">
+        <Text className="text-2xl font-bold text-white mb-2">Welcome back</Text>
+        <Text className="text-base text-zinc-400">Sign in to continue</Text>
       </View>
 
-      <View style={styles.form}>
-        <View style={styles.inputContainer}>
-          <Mail color="#a1a1aa" size={20} style={styles.inputIcon} />
-          <TextInput
-            style={styles.input}
+      <View className="gap-4">
+        <View className="">
+          {/* <Mail
+            color="#a1a1aa"
+            size={20}
+            className="absolute left-4 top-3 z-10"
+          /> */}
+          <Input
             placeholder="Email"
-            placeholderTextColor="#a1a1aa"
             keyboardType="email-address"
             autoCapitalize="none"
             value={email}
@@ -52,107 +46,29 @@ export default function SignIn() {
           />
         </View>
 
-        <View style={styles.inputContainer}>
-          <Lock color="#a1a1aa" size={20} style={styles.inputIcon} />
-          <TextInput
-            style={styles.input}
+        <View className="">
+          {/* <Lock
+            color="#a1a1aa"
+            size={20}
+            className="absolute left-4 top-3 z-10"
+          /> */}
+          <Input
             placeholder="Password"
-            placeholderTextColor="#a1a1aa"
             secureTextEntry
             value={password}
             onChangeText={setPassword}
           />
         </View>
 
-        <TouchableOpacity style={styles.button} onPress={handleSignIn}>
-          <Text style={styles.buttonText}>Sign in</Text>
-        </TouchableOpacity>
+        <Button title="Sign in" onPress={handleSignIn} />
       </View>
 
-      <View style={styles.footer}>
-        <Text style={styles.footerText}>Don't have an account? </Text>
+      <View className="flex-row justify-center mt-8">
+        <Text className="text-zinc-400 text-base">Don't have an account? </Text>
         <Link href="/sign-up" push>
-          <Text style={styles.footerLink}>Sign up</Text>
+          <Text className="text-blue-500 font-medium text-base">Sign up</Text>
         </Link>
       </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#09090b",
-    padding: 20,
-    justifyContent: "center",
-  },
-  header: {
-    alignItems: "center",
-    marginBottom: 40,
-  },
-  logoContainer: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: "#18181b",
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 20,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#fff",
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: "#a1a1aa",
-  },
-  form: {
-    gap: 16,
-  },
-  inputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#18181b",
-    borderRadius: 8,
-    paddingHorizontal: 16,
-    height: 50,
-  },
-  inputIcon: {
-    marginRight: 12,
-  },
-  input: {
-    flex: 1,
-    color: "#fff",
-    fontSize: 16,
-  },
-  button: {
-    backgroundColor: "#a1a1aa",
-    height: 50,
-    borderRadius: 8,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 8,
-  },
-  buttonText: {
-    color: "#09090b",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  footer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    marginTop: 32,
-  },
-  footerText: {
-    color: "#a1a1aa",
-    fontSize: 14,
-  },
-  footerLink: {
-    color: "#fff",
-    fontSize: 14,
-    fontWeight: "500",
-  },
-});

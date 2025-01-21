@@ -1,7 +1,6 @@
 import React from "react";
 import { Redirect, Stack } from "expo-router";
 import { TrackProvider } from "@/contexts/track-context";
-import color from "@/constants/color";
 import { useAuth } from "@/hooks/use-auth";
 import UserProvider from "@/contexts/user-context";
 
@@ -18,7 +17,7 @@ export default function Layout() {
         <Stack
           screenOptions={{
             headerStyle: {
-              backgroundColor: color.primary,
+              backgroundColor: "#09090b",
             },
             headerTintColor: "#F5F8FA",
             headerTitleStyle: {
