@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { View, Text, Image } from "react-native";
 import { UserIcon } from "lucide-react-native";
 import TrackCard from "./track-card";
 import { Track } from "@/types/track";
@@ -21,95 +21,47 @@ type PostCardProps = {
 
 export default function PostCard({ post }: { post: PostCardProps }) {
   return (
-    <View style={styles.card}>
-      <View style={styles.header}>
+    <View className="bg-zinc-950 border-b border-zinc-800 p-3 gap-4">
+      {/* Header */}
+      <View className="flex-row items-center gap-4">
         {post.profiles.avatar_url ? (
           <Image
             source={{ uri: post.profiles.avatar_url }}
-            style={styles.avatar}
+            className="w-12 h-12 rounded-full"
           />
         ) : (
-          <View style={styles.placeholderAvatar}>
+          <View className="w-12 h-12 rounded-full bg-zinc-700 items-center justify-center">
             <UserIcon color={"#09090b"} size={24} />
           </View>
         )}
-        <View style={styles.headerInfo}>
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-            <Text
-              style={{
-                fontSize: 16,
-                fontWeight: "bold",
-                color: "#f4f4f5",
-              }}
-            >
+        <View className="flex-1">
+          <View className="flex-row items-center">
+            <Text className="text-zinc-100 text-lg font-bold">
               {post.profiles.display_name}
             </Text>
-            <Text style={{ fontSize: 8, color: "#3f3f46" }}>{"\u2B24"}</Text>
-            <Text
-              style={{
-                fontSize: 14,
-                color: "#71717a",
-              }}
-            >
+            <Text className="text-zinc-500 text-xs mx-2">{"\u2B24"}</Text>
+            <Text className="text-zinc-500 text-sm">
               {new Date(post.created_at).toLocaleDateString()}
             </Text>
           </View>
-          <Text
-            style={{
-              fontSize: 14,
-              color: "#71717a",
-            }}
-          >
+          <Text className="text-zinc-500 text-base">
             @{post.profiles.username}
           </Text>
         </View>
         <PostMenu post={post} />
-        {/* <TouchableOpacity>
-          <EllipsisVertical color={"#3f3f46"} size={16} />
-        </TouchableOpacity> */}
       </View>
+
+      {/* Note */}
       {post.note && (
-        <Text
-          style={{
-            fontSize: 14,
-            color: "#fafafa",
-          }}
-        >
-          {post.note}
-        </Text>
+        <Text className="text-zinc-200 text-base mt-3">{post.note}</Text>
       )}
-      {post.track && <TrackCard track={post.track} />}
+
+      {/* Track Card */}
+      {post.track && (
+        <View className="border rounded-lg border-zinc-800">
+          <TrackCard track={post.track} />
+        </View>
+      )}
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  card: {
-    backgroundColor: "#09090b",
-    borderBottomWidth: 0.5,
-    borderColor: "#27272a",
-    padding: 12,
-    gap: 12,
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-  },
-  placeholderAvatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: "#3f3f46",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  headerInfo: {
-    marginLeft: 12,
-    flex: 1,
-  },
-});

@@ -1,5 +1,5 @@
 import Fab from "@/components/ui/fab";
-import { View, StyleSheet, FlatList } from "react-native";
+import { View, FlatList } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Link } from "expo-router";
 import { useQuery } from "@tanstack/react-query";
@@ -26,7 +26,7 @@ export default function Home() {
   });
 
   return (
-    <View style={styles.container}>
+    <View className="flex-1 bg-zinc-950">
       <FlatList
         data={posts}
         keyExtractor={(item) => item.id}
@@ -34,33 +34,11 @@ export default function Home() {
       />
       <Fab>
         <Link href={"/(protected)/search"}>
-          <Ionicons name="add" size={32} color="#e4e4e7" />
+          <View className="bg-zinc-700 rounded-full h-16 w-16 justify-center items-center shadow-lg">
+            <Ionicons name="add" size={32} color="#d4d4d8" />
+          </View>
         </Link>
       </Fab>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    position: "relative",
-    backgroundColor: "#09090b",
-  },
-  placeholderText: {
-    color: "#F5F8FA",
-    fontSize: 20,
-    fontWeight: "600",
-    textAlign: "center",
-  },
-  subText: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#f4f4f5",
-    marginTop: 8,
-    textAlign: "center",
-  },
-  separator: {
-    height: 16,
-  },
-});

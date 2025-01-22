@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, Image } from "react-native";
 import React from "react";
 import { Track } from "@/types/track";
 
@@ -8,41 +8,21 @@ type TrackCardProps = {
 
 export default function TrackCard({ track }: TrackCardProps) {
   return (
-    <View style={styles.container}>
+    <View className="flex-row items-center gap-3 p-2 rounded-lg">
       {track.album.images.length > 0 && (
         <Image
           source={{ uri: track.album.images[0].url }}
-          style={styles.albumCover}
+          className="w-12 h-12 rounded-md"
         />
       )}
-      <View style={styles.info}>
-        <Text numberOfLines={1}>{track.name}</Text>
-        <Text numberOfLines={1}>
+      <View className="flex-1 justify-center gap-1">
+        <Text numberOfLines={1} className="text-zinc-100 font-bold">
+          {track.name}
+        </Text>
+        <Text numberOfLines={1} className="text-zinc-500">
           {track.artists.map((artist) => artist.name).join(", ")}
         </Text>
       </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 12,
-    padding: 8,
-    borderWidth: 0.2,
-    borderColor: "#3f3f46",
-    borderRadius: 10,
-  },
-  albumCover: {
-    width: 48,
-    height: 48,
-    borderRadius: 6,
-  },
-  info: {
-    flex: 1,
-    justifyContent: "center",
-    gap: 4,
-  },
-});

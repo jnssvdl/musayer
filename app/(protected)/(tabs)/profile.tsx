@@ -1,19 +1,14 @@
-import { View, StyleSheet, FlatList } from "react-native";
+import { View, FlatList } from "react-native";
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { selectUserPosts } from "@/api/supabase";
 import useUser from "@/hooks/use-user";
-import { useAuth } from "@/hooks/use-auth";
 import { getSeveralTracks } from "@/api/spotify";
 import { useToken } from "@/hooks/use-token";
 import PostCard from "@/components/post-card";
 import ProfileCard from "@/components/profile-card";
-import { Stack } from "expo-router";
-import Button from "@/components/ui/button";
 
 export default function Profile() {
-  const { signOut } = useAuth();
-
   const user = useUser();
 
   const { data: token } = useToken();
@@ -33,65 +28,14 @@ export default function Profile() {
   });
 
   return (
-    <View style={styles.container}>
-      <Stack.Screen
-        options={{
-          headerRight: () => <Button title="Sign out" onPress={signOut} />,
-        }}
-      />
+    <View className="flex-1 bg-zinc-950">
       <FlatList
         data={posts}
         keyExtractor={(item) => item.id}
         ListHeaderComponent={<ProfileCard />}
         renderItem={({ item }) => <PostCard post={item} />}
-        ListFooterComponent={<View style={{ height: 20 }} />}
+        ListFooterComponent={<View className="h-5" />}
       />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#09090b",
-  },
-  centered: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#09090b",
-  },
-  header: {
-    padding: 16,
-    gap: 8,
-    backgroundColor: "#09090b",
-    borderBottomWidth: 0.5,
-    borderColor: "#27272a",
-  },
-  avatar: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    marginRight: 16,
-  },
-  placeholderAvatar: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    backgroundColor: "#3f3f46",
-    alignItems: "center",
-    justifyContent: "center",
-    marginRight: 16,
-  },
-  headerInfo: {
-    flex: 1,
-  },
-  signOutButton: {
-    backgroundColor: "#3f3f46",
-    padding: 8,
-    borderRadius: 8,
-  },
-  posts: {
-    padding: 16,
-  },
-});

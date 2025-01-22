@@ -57,7 +57,7 @@ export default function Search() {
   }, [query]);
 
   return (
-    <View className="flex-1 bg-zinc-950 p-2">
+    <View className="flex-1 bg-zinc-950 p-4">
       <Stack.Screen
         options={{
           headerTitle: () => (

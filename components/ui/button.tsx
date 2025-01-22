@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  TouchableOpacity,
-  Text,
-  StyleSheet,
-  TouchableOpacityProps,
-} from "react-native";
+import { TouchableOpacity, Text, TouchableOpacityProps } from "react-native";
 
 interface ButtonProps extends TouchableOpacityProps {
   title: string;
@@ -12,25 +7,13 @@ interface ButtonProps extends TouchableOpacityProps {
 
 const Button: React.FC<ButtonProps> = ({ title, ...props }) => {
   return (
-    <TouchableOpacity style={styles.button} {...props}>
-      <Text style={styles.text}>{title}</Text>
+    <TouchableOpacity
+      className="bg-zinc-300 p-3 rounded-full items-center justify-center"
+      {...props}
+    >
+      <Text className="text-zinc-950 text-base font-medium">{title}</Text>
     </TouchableOpacity>
   );
 };
-
-const styles = StyleSheet.create({
-  button: {
-    backgroundColor: "#D3D3D3",
-    padding: 12,
-    borderRadius: 30,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  text: {
-    color: "#000000",
-    fontSize: 16,
-    fontWeight: "500",
-  },
-});
 
 export default Button;

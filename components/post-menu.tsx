@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  Modal,
-  Alert,
-} from "react-native";
+import { View, Text, TouchableOpacity, Modal, Alert } from "react-native";
 import { EllipsisVertical, Pencil, Trash2 } from "lucide-react-native";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useUser from "@/hooks/use-user";
@@ -85,12 +78,13 @@ export default function PostMenu({ post }: { post: PostCardProps }) {
         onRequestClose={() => setMenuVisible(false)}
       >
         <TouchableOpacity
-          style={styles.modalOverlay}
+          className="flex-1 bg-zinc-950/50 justify-end"
           onPress={() => setMenuVisible(false)}
         >
-          <View style={styles.menuContainer}>
+          <View className="bg-zinc-950 rounded-t-xl p-4">
+            {/* Edit Post */}
             <TouchableOpacity
-              style={styles.menuItem}
+              className="flex-row items-center py-2"
               onPress={() => {
                 setId(post.id);
                 setTrack(post.track || null);
@@ -100,17 +94,15 @@ export default function PostMenu({ post }: { post: PostCardProps }) {
               }}
             >
               <Pencil color={"white"} size={16} />
-              <Text style={styles.menuText}>Edit Post</Text>
+              <Text className="text-zinc-300 ml-3">Edit</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={[styles.menuItem, styles.deleteItem]}
+              className="flex-row items-center border-t border-zinc-800 pt-4 py-2"
               onPress={handleDelete}
             >
-              <Trash2 color="#ef4444" size={16} />
-              <Text style={[styles.menuText, styles.deleteText]}>
-                Delete Post
-              </Text>
+              <Trash2 color="#991b1b" size={16} />
+              <Text className="text-red-800 ml-3">Delete</Text>
             </TouchableOpacity>
           </View>
         </TouchableOpacity>
@@ -118,83 +110,3 @@ export default function PostMenu({ post }: { post: PostCardProps }) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    justifyContent: "flex-end",
-  },
-  menuContainer: {
-    backgroundColor: "#09090b",
-    borderTopLeftRadius: 12,
-    borderTopRightRadius: 12,
-    padding: 16,
-    gap: 16,
-  },
-  menuItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 12,
-    padding: 8,
-  },
-  deleteItem: {
-    borderTopWidth: 0.5,
-    borderColor: "#27272a",
-    paddingTop: 16,
-  },
-  menuText: {
-    fontSize: 14,
-    color: "#71717a",
-  },
-  deleteText: {
-    color: "#ef4444",
-  },
-  editModalContainer: {
-    flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    justifyContent: "center",
-    padding: 16,
-  },
-  editModalContent: {
-    backgroundColor: "#09090b",
-    borderRadius: 12,
-    padding: 16,
-    gap: 16,
-  },
-  editModalTitle: {
-    textAlign: "center",
-  },
-  input: {
-    backgroundColor: "#3f3f46",
-    borderRadius: 8,
-    padding: 12,
-    color: "white",
-    minHeight: 100,
-    textAlignVertical: "top",
-  },
-  editModalButtons: {
-    flexDirection: "row",
-    gap: 12,
-  },
-  button: {
-    flex: 1,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-    alignItems: "center",
-  },
-  cancelButton: {
-    backgroundColor: "#3f3f46",
-  },
-  saveButton: {
-    backgroundColor: "#3b82f6",
-  },
-  buttonText: {
-    fontSize: 14,
-    color: "#71717a",
-  },
-  saveButtonText: {
-    color: "#ffffff",
-  },
-});

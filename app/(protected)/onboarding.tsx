@@ -69,9 +69,9 @@ export default function OnboardingScreen() {
   };
 
   return (
-    <View className="flex-1 bg-zinc-950 justify-center p-5">
+    <View className="flex-1 bg-zinc-950 justify-center p-4">
       <View className="items-center mb-8">
-        <Text className="text-2xl font-bold text-white mb-2">
+        <Text className="text-2xl font-bold text-zinc-100 mb-2">
           Create your profile
         </Text>
         <Text className="text-base text-zinc-400">

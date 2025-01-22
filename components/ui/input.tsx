@@ -1,33 +1,18 @@
 import React from "react";
-import { TextInput, StyleSheet, TextInputProps } from "react-native";
+import { TextInput, TextInputProps } from "react-native";
 
-const Input: React.FC<TextInputProps> = (props) => {
+const Input: React.FC<TextInputProps> = ({
+  className,
+  editable = true,
+  ...props
+}) => {
   return (
     <TextInput
-      style={[
-        styles.input,
-        props.editable === false && styles.disabled,
-        props.style,
-      ]}
-      placeholderTextColor="#3f3f46"
+      className="h-12 rounded-lg px-4 text-base bg-zinc-800 text-zinc-50"
+      placeholderTextColor="#71717a"
       {...props}
     />
   );
 };
-
-const styles = StyleSheet.create({
-  input: {
-    height: 48,
-    borderRadius: 8,
-    paddingHorizontal: 16,
-    fontSize: 16,
-    backgroundColor: "#27272a",
-    color: "white",
-  },
-  disabled: {
-    backgroundColor: "#f5f5f5",
-    color: "#999",
-  },
-});
 
 export default Input;
