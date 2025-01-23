@@ -34,7 +34,6 @@ export default function RootLayout() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <Slot />
-        {/* <Stack screenOptions={{ headerShown: false }} /> */}
         <StatusBar style="auto" />
       </AuthProvider>
     </QueryClientProvider>

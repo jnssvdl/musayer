@@ -9,7 +9,7 @@ type PostCardProps = {
   track: Track | undefined;
   created_at: string;
   id: string;
-  note: string | null;
+  note: string;
   profile_id: string;
   track_id: string;
   profiles: {
@@ -21,7 +21,7 @@ type PostCardProps = {
 
 export default function PostCard({ post }: { post: PostCardProps }) {
   return (
-    <View className="bg-zinc-950 border-b border-zinc-800 p-3 gap-4">
+    <View className="bg-zinc-950 border-b border-zinc-800 p-3 gap-3">
       {/* Header */}
       <View className="flex-row items-center gap-4">
         {post.profiles.avatar_url ? (
@@ -48,12 +48,17 @@ export default function PostCard({ post }: { post: PostCardProps }) {
             @{post.profiles.username}
           </Text>
         </View>
-        <PostMenu post={post} />
+        <PostMenu
+          track={post.track}
+          note={post.note}
+          postId={post.id}
+          profile_id={post.profile_id}
+        />
       </View>
 
       {/* Note */}
       {post.note && (
-        <Text className="text-zinc-200 text-base mt-3">{post.note}</Text>
+        <Text className="text-zinc-200 text-base">{post.note}</Text>
       )}
 
       {/* Track Card */}

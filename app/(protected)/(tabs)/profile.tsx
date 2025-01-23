@@ -1,4 +1,4 @@
-import { View, FlatList } from "react-native";
+import { View, FlatList, ActivityIndicator, Image } from "react-native";
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { selectUserPosts } from "@/api/supabase";
@@ -7,13 +7,16 @@ import { getSeveralTracks } from "@/api/spotify";
 import { useToken } from "@/hooks/use-token";
 import PostCard from "@/components/post-card";
 import ProfileCard from "@/components/profile-card";
+import Fab from "@/components/ui/fab";
+import { Link, Stack } from "expo-router";
+import { Plus } from "lucide-react-native";
 
 export default function Profile() {
   const user = useUser();
 
   const { data: token } = useToken();
 
-  const { data: posts } = useQuery({
+  const { data: posts, isLoading } = useQuery({
     queryKey: ["profile-posts"],
     queryFn: async () => {
       const posts = await selectUserPosts(user);
@@ -27,8 +30,27 @@ export default function Profile() {
     },
   });
 
+  if (isLoading) {
+    return (
+      <View className="flex-1 justify-center items-center bg-zinc-950">
+        <ActivityIndicator color="#a1a1aa" size="large" />
+      </View>
+    );
+  }
+
   return (
     <View className="flex-1 bg-zinc-950">
+      <Stack.Screen
+        options={{
+          headerTitle: () => (
+            <Image
+              source={require("../../../assets/images/icons.png")}
+              className="w-14 h-14"
+              resizeMode="contain"
+            />
+          ),
+        }}
+      />
       <FlatList
         data={posts}
         keyExtractor={(item) => item.id}
@@ -36,6 +58,13 @@ export default function Profile() {
         renderItem={({ item }) => <PostCard post={item} />}
         ListFooterComponent={<View className="h-5" />}
       />
+      <Fab>
+        <Link href={"/(protected)/search"}>
+          <View className="bg-zinc-700 rounded-full h-16 w-16 justify-center items-center shadow-lg">
+            <Plus size={32} color="#d4d4d8" />
+          </View>
+        </Link>
+      </Fab>
     </View>
   );
 }

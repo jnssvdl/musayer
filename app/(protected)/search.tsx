@@ -11,13 +11,14 @@ import { useToken } from "@/hooks/use-token";
 import { useQuery } from "@tanstack/react-query";
 import { Track } from "@/types/track";
 import TrackCard from "@/components/track-card";
-import { useTrack } from "@/hooks/use-track";
+import { usePost } from "@/hooks/use-post";
 import Input from "@/components/ui/input";
+import { ChevronRight } from "lucide-react-native";
 
 export default function Search() {
   const [query, setQuery] = useState("");
   const { data: token } = useToken();
-  const { setTrack } = useTrack();
+  const { setTrack } = usePost();
 
   const {
     data: tracks,
@@ -72,7 +73,7 @@ export default function Search() {
 
       {isLoading ? (
         <View className="flex-1 justify-center items-center">
-          <ActivityIndicator color="#E1E8ED" size="large" />
+          <ActivityIndicator color="#a1a1aa" size="large" />
           <Text className="text-zinc-400">Searching tracks...</Text>
         </View>
       ) : query.length === 0 ? (

@@ -16,8 +16,8 @@ export default function ProfileForm() {
     queryFn: () => selectProfile(user),
   });
 
-  const [displayName, setDisplayName] = useState(profile?.username);
-  const [username, setUsername] = useState(profile?.username);
+  const [displayName, setDisplayName] = useState(profile?.display_name || "");
+  const [username, setUsername] = useState(profile?.username || "");
   const [avatar, setAvatar] = useState<ImagePicker.ImagePickerAsset | null>(
     null
   );
@@ -26,14 +26,14 @@ export default function ProfileForm() {
 
   const { mutateAsync } = useMutation({
     mutationFn: updateProfile,
-    onMutate: () => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["profile", user.id] });
     },
   });
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ["images"],
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [1, 1],
       quality: 1,
@@ -71,14 +71,19 @@ export default function ProfileForm() {
     router.replace("/(protected)/(tabs)");
   };
 
+  // Determine the image source
+  const imageSource = avatar
+    ? { uri: avatar.uri }
+    : profile?.avatar_url
+    ? { uri: profile.avatar_url }
+    : null;
+
   return (
     <View>
       <TouchableOpacity onPress={pickImage} className="self-center mb-8">
-        {avatar ? (
+        {imageSource ? (
           <Image
-            source={{
-              uri: profile?.avatar_url ? profile.avatar_url : avatar.uri,
-            }}
+            source={imageSource}
             className="w-[150px] h-[150px] rounded-full border-3 border-zinc-600"
           />
         ) : (
@@ -91,13 +96,13 @@ export default function ProfileForm() {
 
       <View className="gap-4">
         <Input
-          value={displayName || ""}
+          value={displayName}
           onChangeText={setDisplayName}
           placeholder="Display name"
           placeholderTextColor="#6b7280"
         />
         <Input
-          value={username || ""}
+          value={username}
           onChangeText={setUsername}
           placeholder="Username"
           placeholderTextColor="#6b7280"

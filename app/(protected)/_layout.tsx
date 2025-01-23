@@ -1,6 +1,6 @@
 import React from "react";
 import { Redirect, Stack } from "expo-router";
-import { TrackProvider } from "@/contexts/track-context";
+import { PostProvider } from "@/contexts/post-context";
 import { useAuth } from "@/hooks/use-auth";
 import UserProvider from "@/contexts/user-context";
 
@@ -13,7 +13,7 @@ export default function Layout() {
 
   return (
     <UserProvider>
-      <TrackProvider>
+      <PostProvider>
         <Stack
           screenOptions={{
             headerStyle: {
@@ -29,7 +29,7 @@ export default function Layout() {
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="onboarding" options={{ headerShown: false }} />
         </Stack>
-      </TrackProvider>
+      </PostProvider>
     </UserProvider>
   );
 }
