@@ -39,8 +39,9 @@ export default function Home() {
         options={{
           headerTitle: () => (
             <Image
-              source={require("../../../assets/images/icons.png")}
-              className="w-14 h-14"
+              source={require("../../../assets/images/logo.png")}
+              style={{ height: 56, width: 56 }}
+              className="w-12 h-12"
               resizeMode="contain"
             />
           ),

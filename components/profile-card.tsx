@@ -11,7 +11,7 @@ import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { selectProfile } from "@/api/supabase";
 import useUser from "@/hooks/use-user";
-import { Ellipsis, LogOut, Pencil } from "lucide-react-native"; // for three-dot icon
+import { Ellipsis, LogOut, Pencil, UserIcon } from "lucide-react-native"; // for three-dot icon
 import { useAuth } from "@/hooks/use-auth";
 import { router } from "expo-router";
 
@@ -54,8 +54,8 @@ export default function ProfileCard() {
             className="w-16 h-16 rounded-full mr-4"
           />
         ) : (
-          <View className="w-16 h-16 rounded-full bg-zinc-600 items-center justify-center mr-4">
-            <Text className="text-xl font-bold text-zinc-100">?</Text>
+          <View className="w-16 h-16 rounded-full bg-zinc-700 items-center justify-center mr-4">
+            <UserIcon color={"#09090b"} size={24} />
           </View>
         )}
         <View className="flex-1">

@@ -9,6 +9,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "@/contexts/auth-provider";
 
 import "../global.css";
+import { View } from "react-native";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -33,7 +34,9 @@ export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <Slot />
+        <View className="bg-zinc-950 flex-1">
+          <Slot />
+        </View>
         <StatusBar style="auto" />
       </AuthProvider>
     </QueryClientProvider>

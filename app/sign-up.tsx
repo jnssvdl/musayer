@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, Alert } from "react-native";
+import { View, Text, Alert, Image } from "react-native";
 import { Mail, Lock } from "lucide-react-native";
 import { Link } from "expo-router";
 import { useAuth } from "@/hooks/use-auth";
@@ -32,6 +32,11 @@ export default function SignUp() {
   return (
     <View className="flex-1 bg-zinc-950 p-5 justify-center">
       <View className="items-center mb-10">
+        <Image
+          source={require("../assets/images/logo.png")}
+          className="w-32 h-32 mb-4"
+          resizeMode="contain"
+        />
         <Text className="text-2xl font-bold text-white mb-2">
           Create account
         </Text>
@@ -78,7 +83,7 @@ export default function SignUp() {
           Already have an account?{" "}
         </Text>
         <Link href="/sign-in" asChild>
-          <Text className="text-blue-500 font-medium text-base">Sign in</Text>
+          <Text className="text-zinc-300 font-medium text-base">Sign in</Text>
         </Link>
       </View>
     </View>

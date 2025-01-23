@@ -44,8 +44,9 @@ export default function Profile() {
         options={{
           headerTitle: () => (
             <Image
-              source={require("../../../assets/images/icons.png")}
-              className="w-14 h-14"
+              style={{ height: 56, width: 56 }}
+              source={require("../../../assets/images/logo.png")}
+              className="w-12 h-12"
               resizeMode="contain"
             />
           ),
