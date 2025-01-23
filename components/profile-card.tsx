@@ -11,24 +11,16 @@ import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { selectProfile } from "@/api/supabase";
 import useUser from "@/hooks/use-user";
-import {
-  EllipsisVertical,
-  LogOut,
-  Pencil,
-  PowerOffIcon,
-} from "lucide-react-native"; // for three-dot icon
+import { Ellipsis, LogOut, Pencil } from "lucide-react-native"; // for three-dot icon
 import { useAuth } from "@/hooks/use-auth";
+import { router } from "expo-router";
 
 export default function ProfileCard() {
   const user = useUser();
   const [menuVisible, setMenuVisible] = useState(false);
   const { signOut } = useAuth();
 
-  const {
-    data: profile,
-    isLoading,
-    error,
-  } = useQuery({
+  const { data: profile, isLoading } = useQuery({
     queryKey: ["profile", user.id],
     queryFn: () => selectProfile(user),
   });
@@ -43,10 +35,6 @@ export default function ProfileCard() {
         onPress: signOut,
       },
     ]);
-  };
-
-  const handleEditProfile = () => {
-    // Navigate to edit profile screen
   };
 
   if (isLoading) {
@@ -79,7 +67,7 @@ export default function ProfileCard() {
 
         {/* Three dots menu button */}
         <TouchableOpacity onPress={() => setMenuVisible(true)}>
-          <EllipsisVertical color="#3f3f46" size={16} />
+          <Ellipsis color="#3f3f46" size={16} />
         </TouchableOpacity>
       </View>
 
@@ -100,7 +88,10 @@ export default function ProfileCard() {
           onPress={() => setMenuVisible(false)}
         >
           <View className="bg-zinc-950 p-4 rounded-t-xl gap-4">
-            <TouchableOpacity className="flex-row items-center py-2">
+            <TouchableOpacity
+              className="flex-row items-center py-2"
+              onPress={() => router.push("/(protected)/edit")}
+            >
               <Pencil color={"white"} size={16} />
               <Text className="text-zinc-100 ml-3">Edit</Text>
             </TouchableOpacity>
