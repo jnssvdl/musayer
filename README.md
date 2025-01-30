@@ -1,50 +1,98 @@
-# Welcome to your Expo app 👋
+# Welcome to Musayer 🎵
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Musayer is a mobile platform for music enthusiasts to **discover, share, and discuss music**. Designed as a **social music diary**, it allows users to write and share thoughts, experiences, and opinions about songs they listen to.
 
-## Get started
+Built with **React Native** and **Expo**, Musayer bridges the gap between social networking and music discovery, fostering a community of listeners, musicians, and critics.
 
-1. Install dependencies
+> **Note:** This project is a college requirement for the course _DCIT 26: Application Development and Emerging Technologies_ at Cavite State University.
 
+---
+
+## Features 🚀
+
+- **User Authentication**: Secure signup and login.
+- **Profiles**: Personal pages with user details and posts.
+- **Timeline & Feed**: Discover posts from other music lovers.
+- **Music Search**: Find songs and albums to add notes.
+- **Compose Notes**: Share reviews, thoughts, and recommendations.
+
+## Get Started 💻
+
+### Prerequisites
+
+Make sure you have the following installed:
+
+- [Node.js (v18.x or above)](https://nodejs.org/)
+- [npm (v9.x or above)](https://www.npmjs.com/)
+- [Expo CLI](https://docs.expo.dev/get-started/installation/)
+- [Git](https://git-scm.com/)
+
+### Installation & Setup
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-repo/musayer.git
+   cd musayer
+   ```
+2. Install dependencies:
    ```bash
    npm install
    ```
-
-2. Start the app
-
+3. Start the app:
    ```bash
-    npx expo start
+   npx expo start
    ```
+4. Open the app in:
+   - [Development build](https://docs.expo.dev/develop/development-builds/introduction/)
+   - [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
+   - [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
+   - [Expo Go](https://expo.dev/go)
 
-In the output, you'll find options to open the app in a
+### Environment Variables Setup 🌍
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+Musayer requires environment variables for **Spotify Web API** and **Supabase** configuration.
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+Create a `.env.local` file in the root directory and add:
 
-## Get a fresh project
+```env
+# Spotify Web API
+SPOTIFY_CLIENT_ID=your_spotify_client_id
+SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
 
-When you're ready, run:
+# Supabase Configuration
+SUPABASE_URL=your_supabase_url
+SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+### Reset the Project
+
+If you need a fresh start, run:
 
 ```bash
 npm run reset-project
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+This will move the starter code to `app-example/` and create a blank `app/` directory.
 
-## Learn more
+---
 
-To learn more about developing your project with Expo, look at the following resources:
+## Future Improvements 🛠️
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+- **Follow System**: Follow users and personalize your feed.
+- **Likes & Comments**: Engage with posts through reactions.
+- **Music Recommendations**: AI-driven suggestions based on listening habits.
+- **Dark Mode**: Theme switching based on device settings.
 
-## Join the community
+---
 
-Join our community of developers creating universal apps.
+## Learn More 📖
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- [Expo Documentation](https://docs.expo.dev/)
+- [React Native Docs](https://reactnative.dev/)
+
+## Join the Community 🌎
+
+- [GitHub](https://github.com/your-repo/musayer)
+- [Expo Discord](https://chat.expo.dev)
+
+🎧 Happy Music Sharing! 🚀
